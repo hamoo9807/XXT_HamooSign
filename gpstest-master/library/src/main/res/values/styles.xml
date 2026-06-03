@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2008 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources>
+    <!-- Base application theme -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+    <style name="AppTheme.Dark" parent="Theme.MaterialComponents">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+    <style name="AppTheme.Dark.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar"/>
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light"/>
+    <style name="AppTheme.PopupOverlay.Dark" parent="ThemeOverlay.MaterialComponents.Light"/>
+
+    <style name="AppTheme.Preferences" parent="Theme.MaterialComponents.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <!-- Navigation Drawer -->
+    <style name="NavDrawerListItem.Light" parent="Widget.AppCompat.ListView.Menu">
+        <item name="android:background">@drawable/navdrawer_item_selectable_light</item>
+        <item name="android:shape">oval</item>
+    </style>
+
+    <!-- Dark style is set programmatically in NavigationDrawerFragment instead of via style - see #119 -->
+
+    <!-- GNSS Status view -->
+    <style name="info_label">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textSize">@dimen/status_text_size</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:paddingRight">4dip</item>
+    </style>
+
+    <style name="info_value">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textSize">@dimen/status_text_size</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="info_value_error">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textSize">@dimen/status_text_size</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:paddingTop">3dp</item>
+        <item name="android:paddingBottom">3dp</item>
+        <item name="android:paddingLeft">6dp</item>
+        <item name="android:paddingRight">6dp</item>
+        <item name="android:background">@drawable/error_text_background</item>
+    </style>
+
+    <!-- GNSS Sky view -->
+    <style name="sky_legend_label">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textSize">@dimen/sky_legend_text_size_large</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="sky_legend_value">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textSize">@dimen/sky_legend_text_size_small</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="cn0_avg_value_in_view">
+        <item name="android:textSize">10sp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:paddingTop">3dp</item>
+        <item name="android:paddingBottom">3dp</item>
+        <item name="android:paddingLeft">6dp</item>
+        <item name="android:paddingRight">6dp</item>
+        <item name="android:background">@drawable/cn0_round_corner_background_in_view</item>
+    </style>
+
+    <style name="cn0_avg_value_used" parent="cn0_avg_value_in_view">
+        <item name="android:background">@drawable/cn0_round_corner_background_used</item>
+    </style>
+
+    <!-- We need our own style for a material button that's just an image without text - see https://github.com/material-components/material-components-android/issues/272 -->
+    <style name="Widget.AppTheme.Button.IconButton" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:minWidth">0dp</item>
+        <item name="android:insetLeft">0dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetRight">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="iconGravity">textStart</item>
+        <item name="iconPadding">0dp</item>
+        <item name="iconTint">@color/colorAccent</item>
+    </style>
+</resources>
+

@@ -1,0 +1,7 @@
+// Decompilation failed: 'ClassAnalysis' object has no attribute 'get_name'
+// Class: Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageConfig$Builder;
+// Method: <init> ()V
+// Method: <init> (I)V
+// Method: clearField1 ()Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageConfig$Builder;
+// Method: getField1 ()Z
+// Method: setField1 (Z)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageConfig$Builder;

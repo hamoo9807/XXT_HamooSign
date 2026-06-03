@@ -1,0 +1,15 @@
+// Decompilation failed: 'ClassAnalysis' object has no attribute 'get_name'
+// Class: Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MetaOrBuilder;
+// Method: getDefaultInstanceForType ()Ljl2;
+// Method: getField1 ()J
+// Method: getField2 ()Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/JID;
+// Method: getField3 ()Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/JID;
+// Method: getField4 ()J
+// Method: getField5 ()Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/NameSpace;
+// Method: getField5Value ()I
+// Method: getField6 ()Ldu;
+// Method: getField7 ()Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/RouteType;
+// Method: getField7Value ()I
+// Method: hasField2 ()Z
+// Method: hasField3 ()Z
+// Method: isInitialized ()Z

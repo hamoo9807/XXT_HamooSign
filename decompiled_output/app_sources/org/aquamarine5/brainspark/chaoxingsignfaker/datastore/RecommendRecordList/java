@@ -1,0 +1,40 @@
+// Decompilation failed: 'ClassAnalysis' object has no attribute 'get_name'
+// Class: Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecordList;
+// Method: <clinit> ()V
+// Method: <init> ()V
+// Method: addAllRecords (Ljava/lang/Iterable;)V
+// Method: addRecords (I Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecord;)V
+// Method: addRecords (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecord;)V
+// Method: clearRecords ()V
+// Method: ensureRecordsIsMutable ()V
+// Method: f (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecordList; Ljava/lang/Iterable;)V
+// Method: g (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecordList; I Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecord;)V
+// Method: getDefaultInstance ()Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecordList;
+// Method: h (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecordList; Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecord;)V
+// Method: i (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecordList;)V
+// Method: j (I Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecordList;)V
+// Method: k (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecordList; I Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecord;)V
+// Method: l ()Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecordList;
+// Method: newBuilder ()Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecordList$Builder;
+// Method: newBuilder (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecordList;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecordList$Builder;
+// Method: parseDelimitedFrom (Ljava/io/InputStream;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecordList;
+// Method: parseDelimitedFrom (Ljava/io/InputStream; Lb81;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecordList;
+// Method: parseFrom (Ldu;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecordList;
+// Method: parseFrom (Ldu; Lb81;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecordList;
+// Method: parseFrom (Ljava/io/InputStream;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecordList;
+// Method: parseFrom (Ljava/io/InputStream; Lb81;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecordList;
+// Method: parseFrom (Ljava/nio/ByteBuffer;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecordList;
+// Method: parseFrom (Ljava/nio/ByteBuffer; Lb81;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecordList;
+// Method: parseFrom (Lye0;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecordList;
+// Method: parseFrom (Lye0; Lb81;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecordList;
+// Method: parseFrom ([B)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecordList;
+// Method: parseFrom ([B Lb81;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecordList;
+// Method: parser ()Lua3;
+// Method: removeRecords (I)V
+// Method: setRecords (I Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecord;)V
+// Method: dynamicMethod (Lok1; Ljava/lang/Object; Ljava/lang/Object;)Ljava/lang/Object;
+// Method: getRecords (I)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecord;
+// Method: getRecordsCount ()I
+// Method: getRecordsList ()Ljava/util/List;
+// Method: getRecordsOrBuilder (I)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecordOrBuilder;
+// Method: getRecordsOrBuilderList ()Ljava/util/List;

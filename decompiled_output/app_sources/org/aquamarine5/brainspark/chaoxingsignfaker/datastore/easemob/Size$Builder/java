@@ -1,0 +1,10 @@
+// Decompilation failed: 'ClassAnalysis' object has no attribute 'get_name'
+// Class: Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/Size$Builder;
+// Method: <init> ()V
+// Method: <init> (I)V
+// Method: clearHeight ()Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/Size$Builder;
+// Method: clearWidth ()Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/Size$Builder;
+// Method: getHeight ()D
+// Method: getWidth ()D
+// Method: setHeight (D)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/Size$Builder;
+// Method: setWidth (D)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/Size$Builder;

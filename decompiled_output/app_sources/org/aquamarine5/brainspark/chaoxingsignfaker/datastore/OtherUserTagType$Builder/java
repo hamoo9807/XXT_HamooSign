@@ -1,0 +1,15 @@
+// Decompilation failed: 'ClassAnalysis' object has no attribute 'get_name'
+// Class: Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/OtherUserTagType$Builder;
+// Method: <init> ()V
+// Method: <init> (I)V
+// Method: clearColor ()Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/OtherUserTagType$Builder;
+// Method: clearId ()Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/OtherUserTagType$Builder;
+// Method: clearName ()Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/OtherUserTagType$Builder;
+// Method: getColor ()J
+// Method: getId ()I
+// Method: getName ()Ljava/lang/String;
+// Method: getNameBytes ()Ldu;
+// Method: setColor (J)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/OtherUserTagType$Builder;
+// Method: setId (I)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/OtherUserTagType$Builder;
+// Method: setName (Ljava/lang/String;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/OtherUserTagType$Builder;
+// Method: setNameBytes (Ldu;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/OtherUserTagType$Builder;

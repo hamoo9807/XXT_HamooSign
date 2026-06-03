@@ -1,0 +1,13 @@
+// Decompilation failed: 'ClassAnalysis' object has no attribute 'get_name'
+// Class: Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/NameSpace;
+// Method: $values ()[Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/NameSpace;
+// Method: <clinit> ()V
+// Method: <init> (Ljava/lang/String; I I)V
+// Method: forNumber (I)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/NameSpace;
+// Method: internalGetValueMap ()Lnz1;
+// Method: internalGetVerifier ()Loz1;
+// Method: valueOf (I)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/NameSpace;
+// Method: valueOf (Ljava/lang/String;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/NameSpace;
+// Method: values ()[Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/NameSpace;
+// Method: getNumber ()I
+// Method: clone ()Ljava/lang/Object;

@@ -1,0 +1,158 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
+
+buildDir = file("${rootProject.buildDir}/app_v9")
+
+android {
+    namespace 'com.cofbro.qian'
+    compileSdk 33
+    buildFeatures {
+        viewBinding true
+    }
+    defaultConfig {
+        applicationId "com.cofbro.qian"
+        minSdk 24
+        targetSdk 33
+        versionCode 1
+        versionName "${releaseTime()}"
+        ndk {
+            abiFilters 'arm64-v8a'
+        }
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        // 从local.properties读取高德API Key(不提交到git), 没有则留空(高德定位自动跳过,回退到原生定位)
+        def amapKey = ""
+        def localProps = project.rootProject.file("local.properties")
+        if (localProps.exists()) {
+            def props = new Properties()
+            props.load(localProps.newDataInputStream())
+            amapKey = props.getProperty("AMAP_API_KEY", "")
+        }
+        manifestPlaceholders = [
+            AMAP_API_KEY: amapKey
+        ]
+    }
+
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            def newName = "Doraemon-fix-v${variant.versionName}.apk"
+            outputFileName = newName
+        }
+    }
+
+    signingConfigs {
+        release {
+            storeFile rootProject.file("signingkey.jks")
+            storePassword System.getenv("KEY_STORE_PASSWORD")
+            keyAlias System.getenv("ALIAS")
+            keyPassword System.getenv("KEY_PASSWORD")
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
+        }
+        debug {
+            signingConfig signingConfigs.debug
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    android {
+        lint {
+            baseline = file("lint-baseline.xml")
+        }
+    }
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+
+    sourceSets {
+        main {
+            res.srcDirs =
+                    [
+                            'src/main/res/layout/page',
+                            'src/main/res/layout/item',
+                            'src/main/res/layout',
+                            'src/main/res'
+                    ]
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.8.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+    // mvvmUtils
+    implementation 'io.github.cofbro:mvvmutils:1.0.0'
+    // retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    // viewModelScope
+    implementation('androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2')
+    // lifecycleScope
+    implementation('androidx.lifecycle:lifecycle-runtime-ktx:2.6.2')
+    // fastJson
+    implementation 'com.alibaba:fastjson:1.2.76'
+    // Toast
+    implementation 'com.github.getActivity:ToastUtils:10.5'
+    // glide
+    implementation 'com.github.bumptech.glide:glide:4.13.2'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.13.2'
+    // qrcode
+    implementation 'com.github.bingoogolapple.BGAQRCode-Android:zxing:1.3.8'
+    // OpenCV基础库
+    implementation 'com.github.jenly1314.WeChatQRCode:opencv:2.3.0'
+    implementation 'com.github.jenly1314.WeChatQRCode:opencv-armv64:2.3.0'
+    // 微信二维码识别功能
+    implementation 'com.github.jenly1314.WeChatQRCode:wechat-qrcode:2.3.0'
+    // okhttp
+    implementation("com.squareup.okhttp3:okhttp:4.11.0")
+    // refreshLayout
+    implementation 'io.github.scwang90:refresh-layout-kernel:2.0.5'
+    implementation 'io.github.scwang90:refresh-header-classics:2.0.5'
+    implementation 'io.github.scwang90:refresh-footer-classics:2.0.5'
+    implementation 'io.github.scwang90:refresh-header-radar:2.0.6'
+    implementation 'io.github.scwang90:refresh-header-material:2.0.6'
+    // jsoup
+    implementation 'org.jsoup:jsoup:1.10.2'
+    // 图片加载库
+    implementation 'io.github.lucksiege:pictureselector:v3.11.1'
+    // 图片压缩
+    implementation 'io.github.lucksiege:compress:v3.10.9'
+    // 图片裁剪
+    implementation 'io.github.lucksiege:ucrop:v3.10.9'
+    // 自定义相机
+    implementation 'io.github.lucksiege:camerax:v3.10.9'
+    //
+    implementation 'jp.wasabeef:recyclerview-animators:4.0.2'
+    implementation "org.apache.directory.studio:org.apache.commons.codec:1.8"
+    // lottie
+    implementation "com.airbnb.android:lottie:6.1.0"
+    // 环信IM SDK (学习通IM基于环信)
+    implementation 'io.hyphenate:hyphenate-chat:4.1.0'
+}
+
+static def releaseTime() {
+    return new Date().format("yyyyMMddHHmmss", TimeZone.getTimeZone("UTC"))
+}

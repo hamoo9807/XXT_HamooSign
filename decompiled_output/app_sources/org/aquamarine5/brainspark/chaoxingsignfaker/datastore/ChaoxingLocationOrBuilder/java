@@ -1,0 +1,10 @@
+// Decompilation failed: 'ClassAnalysis' object has no attribute 'get_name'
+// Class: Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingLocationOrBuilder;
+// Method: getAddress ()Ljava/lang/String;
+// Method: getAddressBytes ()Ldu;
+// Method: getDefaultInstanceForType ()Ljl2;
+// Method: getLabel ()Ljava/lang/String;
+// Method: getLabelBytes ()Ldu;
+// Method: getLatitude ()D
+// Method: getLongitude ()D
+// Method: isInitialized ()Z

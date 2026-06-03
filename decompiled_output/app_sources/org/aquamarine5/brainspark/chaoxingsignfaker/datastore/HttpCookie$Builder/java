@@ -1,0 +1,19 @@
+// Decompilation failed: 'ClassAnalysis' object has no attribute 'get_name'
+// Class: Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/HttpCookie$Builder;
+// Method: <init> ()V
+// Method: <init> (I)V
+// Method: clearHost ()Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/HttpCookie$Builder;
+// Method: clearName ()Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/HttpCookie$Builder;
+// Method: clearValue ()Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/HttpCookie$Builder;
+// Method: getHost ()Ljava/lang/String;
+// Method: getHostBytes ()Ldu;
+// Method: getName ()Ljava/lang/String;
+// Method: getNameBytes ()Ldu;
+// Method: getValue ()Ljava/lang/String;
+// Method: getValueBytes ()Ldu;
+// Method: setHost (Ljava/lang/String;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/HttpCookie$Builder;
+// Method: setHostBytes (Ldu;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/HttpCookie$Builder;
+// Method: setName (Ljava/lang/String;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/HttpCookie$Builder;
+// Method: setNameBytes (Ldu;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/HttpCookie$Builder;
+// Method: setValue (Ljava/lang/String;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/HttpCookie$Builder;
+// Method: setValueBytes (Ldu;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/HttpCookie$Builder;

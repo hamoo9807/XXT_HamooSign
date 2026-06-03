@@ -1,0 +1,11 @@
+// Decompilation failed: 'ClassAnalysis' object has no attribute 'get_name'
+// Class: Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingAnalysisOrBuilder;
+// Method: getClickSign ()I
+// Method: getDefaultInstanceForType ()Ljl2;
+// Method: getGestureSign ()I
+// Method: getLocationSign ()I
+// Method: getOtherUserSign ()I
+// Method: getPasswordSign ()I
+// Method: getPhotoSign ()I
+// Method: getQrcodeSign ()I
+// Method: isInitialized ()Z

@@ -1,0 +1,5 @@
+// Decompilation failed: 'ClassAnalysis' object has no attribute 'get_name'
+// Class: Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/RouteType$RouteTypeVerifier;
+// Method: <clinit> ()V
+// Method: <init> ()V
+// Method: isInRange (I)Z

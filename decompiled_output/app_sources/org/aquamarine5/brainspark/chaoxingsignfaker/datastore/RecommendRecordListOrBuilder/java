@@ -1,0 +1,7 @@
+// Decompilation failed: 'ClassAnalysis' object has no attribute 'get_name'
+// Class: Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecordListOrBuilder;
+// Method: getDefaultInstanceForType ()Ljl2;
+// Method: getRecords (I)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecord;
+// Method: getRecordsCount ()I
+// Method: getRecordsList ()Ljava/util/List;
+// Method: isInitialized ()Z

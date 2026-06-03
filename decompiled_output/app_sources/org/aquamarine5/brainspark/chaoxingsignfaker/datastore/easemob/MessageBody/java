@@ -1,0 +1,100 @@
+// Decompilation failed: 'ClassAnalysis' object has no attribute 'get_name'
+// Class: Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageBody;
+// Method: <clinit> ()V
+// Method: <init> ()V
+// Method: A (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageBody; J)V
+// Method: B (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageBody; I Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/Content;)V
+// Method: C (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageBody; I Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/KeyValue;)V
+// Method: D (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageBody; Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/JID;)V
+// Method: E (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageBody; Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageConfig;)V
+// Method: F (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageBody; Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/JID;)V
+// Method: G (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageBody; I)V
+// Method: H ()Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageBody;
+// Method: addAllContents (Ljava/lang/Iterable;)V
+// Method: addAllExt (Ljava/lang/Iterable;)V
+// Method: addContents (I Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/Content;)V
+// Method: addContents (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/Content;)V
+// Method: addExt (I Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/KeyValue;)V
+// Method: addExt (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/KeyValue;)V
+// Method: clearAckContent ()V
+// Method: clearAckMessageId ()V
+// Method: clearContents ()V
+// Method: clearExt ()V
+// Method: clearFrom ()V
+// Method: clearMsgConfig ()V
+// Method: clearTo ()V
+// Method: clearType ()V
+// Method: ensureContentsIsMutable ()V
+// Method: ensureExtIsMutable ()V
+// Method: f (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageBody; Ljava/lang/Iterable;)V
+// Method: g (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageBody; Ljava/lang/Iterable;)V
+// Method: getDefaultInstance ()Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageBody;
+// Method: h (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageBody; I Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/Content;)V
+// Method: i (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageBody; Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/Content;)V
+// Method: j (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageBody; I Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/KeyValue;)V
+// Method: k (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageBody; Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/KeyValue;)V
+// Method: l (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageBody;)V
+// Method: m (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageBody;)V
+// Method: mergeFrom (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/JID;)V
+// Method: mergeMsgConfig (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageConfig;)V
+// Method: mergeTo (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/JID;)V
+// Method: n (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageBody;)V
+// Method: newBuilder ()Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageBody$Builder;
+// Method: newBuilder (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageBody;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageBody$Builder;
+// Method: o (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageBody;)V
+// Method: p (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageBody;)V
+// Method: parseDelimitedFrom (Ljava/io/InputStream;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageBody;
+// Method: parseDelimitedFrom (Ljava/io/InputStream; Lb81;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageBody;
+// Method: parseFrom (Ldu;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageBody;
+// Method: parseFrom (Ldu; Lb81;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageBody;
+// Method: parseFrom (Ljava/io/InputStream;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageBody;
+// Method: parseFrom (Ljava/io/InputStream; Lb81;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageBody;
+// Method: parseFrom (Ljava/nio/ByteBuffer;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageBody;
+// Method: parseFrom (Ljava/nio/ByteBuffer; Lb81;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageBody;
+// Method: parseFrom (Lye0;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageBody;
+// Method: parseFrom (Lye0; Lb81;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageBody;
+// Method: parseFrom ([B)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageBody;
+// Method: parseFrom ([B Lb81;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageBody;
+// Method: parser ()Lua3;
+// Method: q (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageBody;)V
+// Method: r (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageBody;)V
+// Method: removeContents (I)V
+// Method: removeExt (I)V
+// Method: s (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageBody;)V
+// Method: setAckContent (Ljava/lang/String;)V
+// Method: setAckContentBytes (Ldu;)V
+// Method: setAckMessageId (J)V
+// Method: setContents (I Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/Content;)V
+// Method: setExt (I Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/KeyValue;)V
+// Method: setFrom (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/JID;)V
+// Method: setMsgConfig (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageConfig;)V
+// Method: setTo (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/JID;)V
+// Method: setType (I)V
+// Method: t (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageBody; Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/JID;)V
+// Method: u (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageBody; Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageConfig;)V
+// Method: v (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageBody; Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/JID;)V
+// Method: w (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageBody; I)V
+// Method: x (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageBody; I)V
+// Method: y (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageBody; Ljava/lang/String;)V
+// Method: z (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageBody; Ldu;)V
+// Method: dynamicMethod (Lok1; Ljava/lang/Object; Ljava/lang/Object;)Ljava/lang/Object;
+// Method: getAckContent ()Ljava/lang/String;
+// Method: getAckContentBytes ()Ldu;
+// Method: getAckMessageId ()J
+// Method: getContents (I)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/Content;
+// Method: getContentsCount ()I
+// Method: getContentsList ()Ljava/util/List;
+// Method: getContentsOrBuilder (I)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/ContentOrBuilder;
+// Method: getContentsOrBuilderList ()Ljava/util/List;
+// Method: getExt (I)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/KeyValue;
+// Method: getExtCount ()I
+// Method: getExtList ()Ljava/util/List;
+// Method: getExtOrBuilder (I)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/KeyValueOrBuilder;
+// Method: getExtOrBuilderList ()Ljava/util/List;
+// Method: getFrom ()Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/JID;
+// Method: getMsgConfig ()Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageConfig;
+// Method: getTo ()Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/JID;
+// Method: getType ()I
+// Method: hasFrom ()Z
+// Method: hasMsgConfig ()Z
+// Method: hasTo ()Z

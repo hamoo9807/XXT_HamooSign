@@ -1,0 +1,89 @@
+// Decompilation failed: 'ClassAnalysis' object has no attribute 'get_name'
+// Class: Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingOtherUserSession;
+// Method: <clinit> ()V
+// Method: <init> ()V
+// Method: A (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingOtherUserSession; Ljava/lang/String;)V
+// Method: B (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingOtherUserSession; Ldu;)V
+// Method: C (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingOtherUserSession; I I)V
+// Method: D ()Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingOtherUserSession;
+// Method: addAllCookies (Ljava/lang/Iterable;)V
+// Method: addAllTags (Ljava/lang/Iterable;)V
+// Method: addCookies (I Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/HttpCookie;)V
+// Method: addCookies (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/HttpCookie;)V
+// Method: addTags (I)V
+// Method: clearCookies ()V
+// Method: clearFaceImageObjectId ()V
+// Method: clearIsObsoleteSession ()V
+// Method: clearName ()V
+// Method: clearPassword ()V
+// Method: clearPhoneNumber ()V
+// Method: clearTags ()V
+// Method: ensureCookiesIsMutable ()V
+// Method: ensureTagsIsMutable ()V
+// Method: f (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingOtherUserSession; Ljava/lang/Iterable;)V
+// Method: g (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingOtherUserSession; Ljava/lang/Iterable;)V
+// Method: getDefaultInstance ()Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingOtherUserSession;
+// Method: h (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingOtherUserSession; I Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/HttpCookie;)V
+// Method: i (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingOtherUserSession; Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/HttpCookie;)V
+// Method: j (I Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingOtherUserSession;)V
+// Method: k (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingOtherUserSession;)V
+// Method: l (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingOtherUserSession;)V
+// Method: m (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingOtherUserSession;)V
+// Method: n (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingOtherUserSession;)V
+// Method: newBuilder ()Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingOtherUserSession$Builder;
+// Method: newBuilder (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingOtherUserSession;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingOtherUserSession$Builder;
+// Method: o (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingOtherUserSession;)V
+// Method: p (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingOtherUserSession;)V
+// Method: parseDelimitedFrom (Ljava/io/InputStream;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingOtherUserSession;
+// Method: parseDelimitedFrom (Ljava/io/InputStream; Lb81;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingOtherUserSession;
+// Method: parseFrom (Ldu;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingOtherUserSession;
+// Method: parseFrom (Ldu; Lb81;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingOtherUserSession;
+// Method: parseFrom (Ljava/io/InputStream;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingOtherUserSession;
+// Method: parseFrom (Ljava/io/InputStream; Lb81;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingOtherUserSession;
+// Method: parseFrom (Ljava/nio/ByteBuffer;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingOtherUserSession;
+// Method: parseFrom (Ljava/nio/ByteBuffer; Lb81;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingOtherUserSession;
+// Method: parseFrom (Lye0;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingOtherUserSession;
+// Method: parseFrom (Lye0; Lb81;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingOtherUserSession;
+// Method: parseFrom ([B)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingOtherUserSession;
+// Method: parseFrom ([B Lb81;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingOtherUserSession;
+// Method: parser ()Lua3;
+// Method: q (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingOtherUserSession;)V
+// Method: r (I Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingOtherUserSession;)V
+// Method: removeCookies (I)V
+// Method: s (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingOtherUserSession; I Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/HttpCookie;)V
+// Method: setCookies (I Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/HttpCookie;)V
+// Method: setFaceImageObjectId (Ljava/lang/String;)V
+// Method: setFaceImageObjectIdBytes (Ldu;)V
+// Method: setIsObsoleteSession (Z)V
+// Method: setName (Ljava/lang/String;)V
+// Method: setNameBytes (Ldu;)V
+// Method: setPassword (Ljava/lang/String;)V
+// Method: setPasswordBytes (Ldu;)V
+// Method: setPhoneNumber (Ljava/lang/String;)V
+// Method: setPhoneNumberBytes (Ldu;)V
+// Method: setTags (I I)V
+// Method: t (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingOtherUserSession; Ljava/lang/String;)V
+// Method: u (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingOtherUserSession; Ldu;)V
+// Method: v (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingOtherUserSession; Z)V
+// Method: w (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingOtherUserSession; Ljava/lang/String;)V
+// Method: x (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingOtherUserSession; Ldu;)V
+// Method: y (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingOtherUserSession; Ljava/lang/String;)V
+// Method: z (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingOtherUserSession; Ldu;)V
+// Method: dynamicMethod (Lok1; Ljava/lang/Object; Ljava/lang/Object;)Ljava/lang/Object;
+// Method: getCookies (I)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/HttpCookie;
+// Method: getCookiesCount ()I
+// Method: getCookiesList ()Ljava/util/List;
+// Method: getCookiesOrBuilder (I)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/HttpCookieOrBuilder;
+// Method: getCookiesOrBuilderList ()Ljava/util/List;
+// Method: getFaceImageObjectId ()Ljava/lang/String;
+// Method: getFaceImageObjectIdBytes ()Ldu;
+// Method: getIsObsoleteSession ()Z
+// Method: getName ()Ljava/lang/String;
+// Method: getNameBytes ()Ldu;
+// Method: getPassword ()Ljava/lang/String;
+// Method: getPasswordBytes ()Ldu;
+// Method: getPhoneNumber ()Ljava/lang/String;
+// Method: getPhoneNumberBytes ()Ldu;
+// Method: getTags (I)I
+// Method: getTagsCount ()I
+// Method: getTagsList ()Ljava/util/List;

@@ -1,0 +1,11 @@
+// Decompilation failed: 'ClassAnalysis' object has no attribute 'get_name'
+// Class: Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendHabitOrBuilder;
+// Method: getClassId ()I
+// Method: getClassName ()Ljava/lang/String;
+// Method: getClassNameBytes ()Ldu;
+// Method: getCourseId ()I
+// Method: getDayOfWeek ()I
+// Method: getDefaultInstanceForType ()Ljl2;
+// Method: getMinuteOfDay ()I
+// Method: getRecordCount ()I
+// Method: isInitialized ()Z

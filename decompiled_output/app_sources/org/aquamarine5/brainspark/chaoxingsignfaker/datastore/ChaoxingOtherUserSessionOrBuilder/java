@@ -1,0 +1,19 @@
+// Decompilation failed: 'ClassAnalysis' object has no attribute 'get_name'
+// Class: Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingOtherUserSessionOrBuilder;
+// Method: getCookies (I)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/HttpCookie;
+// Method: getCookiesCount ()I
+// Method: getCookiesList ()Ljava/util/List;
+// Method: getDefaultInstanceForType ()Ljl2;
+// Method: getFaceImageObjectId ()Ljava/lang/String;
+// Method: getFaceImageObjectIdBytes ()Ldu;
+// Method: getIsObsoleteSession ()Z
+// Method: getName ()Ljava/lang/String;
+// Method: getNameBytes ()Ldu;
+// Method: getPassword ()Ljava/lang/String;
+// Method: getPasswordBytes ()Ldu;
+// Method: getPhoneNumber ()Ljava/lang/String;
+// Method: getPhoneNumberBytes ()Ldu;
+// Method: getTags (I)I
+// Method: getTagsCount ()I
+// Method: getTagsList ()Ljava/util/List;
+// Method: isInitialized ()Z

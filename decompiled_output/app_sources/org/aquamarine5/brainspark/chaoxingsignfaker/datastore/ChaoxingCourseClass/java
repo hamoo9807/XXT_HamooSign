@@ -1,0 +1,32 @@
+// Decompilation failed: 'ClassAnalysis' object has no attribute 'get_name'
+// Class: Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingCourseClass;
+// Method: <clinit> ()V
+// Method: <init> ()V
+// Method: clearClassId ()V
+// Method: clearCourseId ()V
+// Method: f (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingCourseClass;)V
+// Method: g (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingCourseClass;)V
+// Method: getDefaultInstance ()Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingCourseClass;
+// Method: h (I Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingCourseClass;)V
+// Method: i (I Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingCourseClass;)V
+// Method: j ()Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingCourseClass;
+// Method: newBuilder ()Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingCourseClass$Builder;
+// Method: newBuilder (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingCourseClass;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingCourseClass$Builder;
+// Method: parseDelimitedFrom (Ljava/io/InputStream;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingCourseClass;
+// Method: parseDelimitedFrom (Ljava/io/InputStream; Lb81;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingCourseClass;
+// Method: parseFrom (Ldu;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingCourseClass;
+// Method: parseFrom (Ldu; Lb81;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingCourseClass;
+// Method: parseFrom (Ljava/io/InputStream;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingCourseClass;
+// Method: parseFrom (Ljava/io/InputStream; Lb81;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingCourseClass;
+// Method: parseFrom (Ljava/nio/ByteBuffer;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingCourseClass;
+// Method: parseFrom (Ljava/nio/ByteBuffer; Lb81;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingCourseClass;
+// Method: parseFrom (Lye0;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingCourseClass;
+// Method: parseFrom (Lye0; Lb81;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingCourseClass;
+// Method: parseFrom ([B)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingCourseClass;
+// Method: parseFrom ([B Lb81;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingCourseClass;
+// Method: parser ()Lua3;
+// Method: setClassId (I)V
+// Method: setCourseId (I)V
+// Method: dynamicMethod (Lok1; Ljava/lang/Object; Ljava/lang/Object;)Ljava/lang/Object;
+// Method: getClassId ()I
+// Method: getCourseId ()I

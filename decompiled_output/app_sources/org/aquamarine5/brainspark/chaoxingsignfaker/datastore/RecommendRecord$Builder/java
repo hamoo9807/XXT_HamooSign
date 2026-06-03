@@ -1,0 +1,13 @@
+// Decompilation failed: 'ClassAnalysis' object has no attribute 'get_name'
+// Class: Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecord$Builder;
+// Method: <init> ()V
+// Method: <init> (I)V
+// Method: clearCourseId ()Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecord$Builder;
+// Method: clearDayOfWeek ()Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecord$Builder;
+// Method: clearMinuteOfDay ()Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecord$Builder;
+// Method: getCourseId ()I
+// Method: getDayOfWeek ()I
+// Method: getMinuteOfDay ()I
+// Method: setCourseId (I)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecord$Builder;
+// Method: setDayOfWeek (I)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecord$Builder;
+// Method: setMinuteOfDay (I)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecord$Builder;

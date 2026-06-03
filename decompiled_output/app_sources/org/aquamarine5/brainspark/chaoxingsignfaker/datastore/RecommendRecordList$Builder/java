@@ -1,0 +1,16 @@
+// Decompilation failed: 'ClassAnalysis' object has no attribute 'get_name'
+// Class: Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecordList$Builder;
+// Method: <init> ()V
+// Method: <init> (I)V
+// Method: addAllRecords (Ljava/lang/Iterable;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecordList$Builder;
+// Method: addRecords (I Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecord$Builder;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecordList$Builder;
+// Method: addRecords (I Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecord;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecordList$Builder;
+// Method: addRecords (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecord$Builder;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecordList$Builder;
+// Method: addRecords (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecord;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecordList$Builder;
+// Method: clearRecords ()Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecordList$Builder;
+// Method: getRecords (I)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecord;
+// Method: getRecordsCount ()I
+// Method: getRecordsList ()Ljava/util/List;
+// Method: removeRecords (I)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecordList$Builder;
+// Method: setRecords (I Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecord$Builder;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecordList$Builder;
+// Method: setRecords (I Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecord;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/RecommendRecordList$Builder;

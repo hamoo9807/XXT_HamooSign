@@ -1,0 +1,26 @@
+// Decompilation failed: 'ClassAnalysis' object has no attribute 'get_name'
+// Class: Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/Preferences$Builder;
+// Method: <init> ()V
+// Method: <init> (I)V
+// Method: clearCustomizedPackageName ()Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/Preferences$Builder;
+// Method: clearCustomizedUserAgent ()Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/Preferences$Builder;
+// Method: clearIsDevelopedMode ()Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/Preferences$Builder;
+// Method: clearLastSignedLocation ()Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/Preferences$Builder;
+// Method: clearNeverAskSaveFavoriteLocation ()Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/Preferences$Builder;
+// Method: getCustomizedPackageName ()Ljava/lang/String;
+// Method: getCustomizedPackageNameBytes ()Ldu;
+// Method: getCustomizedUserAgent ()Ljava/lang/String;
+// Method: getCustomizedUserAgentBytes ()Ldu;
+// Method: getIsDevelopedMode ()Z
+// Method: getLastSignedLocation ()Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingLocation;
+// Method: getNeverAskSaveFavoriteLocation ()Z
+// Method: hasLastSignedLocation ()Z
+// Method: mergeLastSignedLocation (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingLocation;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/Preferences$Builder;
+// Method: setCustomizedPackageName (Ljava/lang/String;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/Preferences$Builder;
+// Method: setCustomizedPackageNameBytes (Ldu;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/Preferences$Builder;
+// Method: setCustomizedUserAgent (Ljava/lang/String;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/Preferences$Builder;
+// Method: setCustomizedUserAgentBytes (Ldu;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/Preferences$Builder;
+// Method: setIsDevelopedMode (Z)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/Preferences$Builder;
+// Method: setLastSignedLocation (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingLocation$Builder;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/Preferences$Builder;
+// Method: setLastSignedLocation (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingLocation;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/Preferences$Builder;
+// Method: setNeverAskSaveFavoriteLocation (Z)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/Preferences$Builder;

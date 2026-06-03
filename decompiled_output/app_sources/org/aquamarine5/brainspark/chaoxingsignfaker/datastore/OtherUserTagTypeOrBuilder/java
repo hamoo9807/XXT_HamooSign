@@ -1,0 +1,8 @@
+// Decompilation failed: 'ClassAnalysis' object has no attribute 'get_name'
+// Class: Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/OtherUserTagTypeOrBuilder;
+// Method: getColor ()J
+// Method: getDefaultInstanceForType ()Ljl2;
+// Method: getId ()I
+// Method: getName ()Ljava/lang/String;
+// Method: getNameBytes ()Ldu;
+// Method: isInitialized ()Z

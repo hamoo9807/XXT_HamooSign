@@ -1,0 +1,35 @@
+// Decompilation failed: 'ClassAnalysis' object has no attribute 'get_name'
+// Class: Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingFaceRecognitionImage;
+// Method: <clinit> ()V
+// Method: <init> ()V
+// Method: clearObjectId ()V
+// Method: clearUseCount ()V
+// Method: f (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingFaceRecognitionImage;)V
+// Method: g (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingFaceRecognitionImage;)V
+// Method: getDefaultInstance ()Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingFaceRecognitionImage;
+// Method: h (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingFaceRecognitionImage; Ljava/lang/String;)V
+// Method: i (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingFaceRecognitionImage; Ldu;)V
+// Method: j (I Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingFaceRecognitionImage;)V
+// Method: k ()Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingFaceRecognitionImage;
+// Method: newBuilder ()Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingFaceRecognitionImage$Builder;
+// Method: newBuilder (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingFaceRecognitionImage;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingFaceRecognitionImage$Builder;
+// Method: parseDelimitedFrom (Ljava/io/InputStream;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingFaceRecognitionImage;
+// Method: parseDelimitedFrom (Ljava/io/InputStream; Lb81;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingFaceRecognitionImage;
+// Method: parseFrom (Ldu;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingFaceRecognitionImage;
+// Method: parseFrom (Ldu; Lb81;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingFaceRecognitionImage;
+// Method: parseFrom (Ljava/io/InputStream;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingFaceRecognitionImage;
+// Method: parseFrom (Ljava/io/InputStream; Lb81;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingFaceRecognitionImage;
+// Method: parseFrom (Ljava/nio/ByteBuffer;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingFaceRecognitionImage;
+// Method: parseFrom (Ljava/nio/ByteBuffer; Lb81;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingFaceRecognitionImage;
+// Method: parseFrom (Lye0;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingFaceRecognitionImage;
+// Method: parseFrom (Lye0; Lb81;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingFaceRecognitionImage;
+// Method: parseFrom ([B)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingFaceRecognitionImage;
+// Method: parseFrom ([B Lb81;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingFaceRecognitionImage;
+// Method: parser ()Lua3;
+// Method: setObjectId (Ljava/lang/String;)V
+// Method: setObjectIdBytes (Ldu;)V
+// Method: setUseCount (I)V
+// Method: dynamicMethod (Lok1; Ljava/lang/Object; Ljava/lang/Object;)Ljava/lang/Object;
+// Method: getObjectId ()Ljava/lang/String;
+// Method: getObjectIdBytes ()Ldu;
+// Method: getUseCount ()I

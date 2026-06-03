@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/* //device/apps/common/assets/res/any/strings.xml
+**
+** Copyright 2008-2018 The Android Open Source Project, Sean J. Barbeau
+**
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
+**
+**     https://www.apache.org/licenses/LICENSE-2.0
+**
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
+** limitations under the License.
+*/
+-->
+<resources>
+    <!-- Fragments -->
+    <string name="gps_status_title">상태</string>
+    <string name="gps_map_title">지도</string>
+    <string name="gps_sky_title">하늘</string>
+    <string name="gps_accuracy_title">정확도</string>
+
+    <!-- Navigation Drawer -->
+    <string name="navdrawer_separator_assist_data">보조 데이터 수정</string>
+    <string name="force_psds_injection">PSDS 데이터 주입</string>
+    <string name="force_time_injection">시간 데이터 주입</string>
+    <string name="delete_aiding_data">보조 데이터 삭제</string>
+    <string name="navdrawer_item_settings">설정</string>
+    <string name="navdrawer_item_help">도움말</string>
+    <string name="navdrawer_item_send_feedback">피드백 보내기</string>
+    <string name="navdrawer_item_open_source">GitHub로 방문하기</string>
+
+    <string name="navigation_drawer_open">탐색 서랍 열기</string>
+    <string name="navigation_drawer_close">탐색 서랍 닫기</string>
+
+    <!-- GPS functionality -->
+    <string name="gps_start">시작</string>
+    <string name="gps_pause">중지</string>
+
+    <string name="delete_aiding_data_success">보조 데이터를 성공적으로 삭제하였습니다.</string>
+    <string name="delete_aiding_data_failure">기기가 보조 데이터 삭제를 지원하지 않습니다.</string>
+    <string name="gps_switch">끄기/켜기</string>
+    <string name="share">공유하기</string>
+    <string name="copied_to_clipboard">클립보드에 위치정보 복사</string>
+    <string name="send_log">로그 보내기...</string>
+    <string name="log_instructions">설정에서 NMEA, raw 측정지, 네비게이션 메시지 기록을 활성화 해주세요</string>
+    <string name="log_error">로그 파일 생성에 무언가 문제가 발생했습니다. 파일/저장소 권한을 허가하셨나요? 설정에서 파일 로깅 옵션을 다시 활성화한 후 메시지가 표시되면 \"허용\" 을 누르세요.</string>
+    <string name="include_altitude">고도 포함</string>
+    <string name="set_fix_frequency">확정 주파수 설정</string>
+    <string name="force_time_injection_success">시간 데이터가 성공적으로 주입되었습니다.</string>
+    <string name="force_time_injection_failure">기기가 시간 데이터 주입을 지원하지 않습니다.
+</string>
+
+    <string name="force_psds_injection_success">PSDS 데이터가 성공적으로 주입되었습니다.</string>
+    <string name="force_psds_injection_failure">기기가 PSDS 데이터 주입을 지원 하지 않습니다.
+</string>
+
+    <string name="zoom_in">확대</string>
+    <string name="zoom_out">축소</string>
+    <string name="mode_map">지도</string>
+    <string name="mode_satellite">위성</string>
+
+    <string name="latitude_label">위도:</string>
+    <string name="longitude_label">경도:</string>
+    <string name="fix_time_label">시간:</string>
+    <string name="ttff_label">TTFF:</string>
+    <string name="altitude_label">고도:</string>
+    <string name="altitude_msl_label">고도 (MSL):</string>
+    <string name="accuracy_label">E H Acc:</string>
+    <string name="hor_and_vert_accuracy_label">E H/V Acc:</string>
+    <string name="speed_label">속도:</string>
+    <string name="speed_acc_label">S. Acc:</string>
+    <string name="bearing_label">Bearing:</string>
+    <string name="bearing_acc_label">B. Acc:</string>
+    <string name="num_sats_label"># 위성:</string>
+    <string name="pdop_label">PDOP:</string>
+    <string name="hvdop_label">H/V DOP:</string>
+
+    <string name="id_column_label">ID</string>
+    <string name="gnss_flag_image_label">GNSS</string>
+    <string name="sbas_flag_image_label">SBAS</string>
+    <string name="cf_column_label">CF</string>
+    <string name="gps_snr_column_label">SNR</string>
+    <string name="gps_cn0_column_label">C/N0</string>
+    <string name="avg_cn0_label">평균</string>
+    <string name="elevation_column_label">앙각</string>
+    <string name="azimuth_column_label">방위각</string>
+    <string name="flags_aeu_column_label">플래그</string>
+    <string name="gps_not_supported">시스템 설정을 확인해주세요 - 기기가 GNSS/GPS를 지원하지 않는 것 같습니다.</string>
+    <string name="install">설치</string>
+    <string name="no_thanks">아니오</string>
+    <string name="please_install_google_maps">지도 탭은 Google 지도가 필요합니다</string>
+    <string name="enable_gps_message">GPS/GNSS가 비활성화됨. 지금 활성화 하시겠습니까?</string>
+    <string name="enable_gps_positive_button">GPS/GNSS 활성화</string>
+    <string name="enable_gps_negative_button">아니오</string>
+    <string name="gnss_running">인터벌을 적용해 GNSS 시작됨, 시간 = %1$ss, 최소 거리 = %2$sm
+</string>
+    <string name="clear_assist_warning_title">보조 데이터를 삭제합니까?</string>
+    <string name="clear_assist_warning">일부 기기는 자동으로 보조 데이터가 업데이트 하는데 24시간이 걸립니다. 만약 기기가 수동 주입을 지원하지 않는다면, 자동 업데이트가 완료될 때까지 GNSS가 모든 앱에서 작동하지 않을 수도 있습니다. 정말로 진행하시겠습니까?</string>
+    <string name="never_ask_again">다시 묻지 않기</string>
+    <string name="qr_code_instructions_title">QR 코드 스캔</string>
+    <string name="qr_code_instructions_text">Geo URI 포맷 (geo:28.38434,-87.24334)을 통해 QR코드로 실제 위치 정보를 가져올 수 있습니다. https://zxing.appspot.com/generator/ 에서 자신의 QR 코드를 만드세요.</string>
+    <string name="qr_code_cannot_read_code">QR 코드에서 Geo URI를 읽을 수 없습니다</string>
+    <string name="never_show_again">다시 묻지 않기</string>
+    <string name="not_now">나중에</string>
+    <string name="yes">예</string>
+    <string name="no">아니오</string>
+    <string name="gnss_not_available">글로벌 위성 항법 시스템 (GNSS) 사용 불가능</string>
+    <string name="sbas_not_available">위성 기반 보정 시스템 (SBAS) 사용 불가능</string>
+    <string name="menu_option_sort_by">정렬 방법</string>
+    <string name="error_time_title">GNSS 시간이 잘못 되었습니다</string>
+    <!-- Map view -->
+    <string name="ground_truth_latitude">고도</string>
+    <string name="ground_truth_longitude">경도</string>
+    <string name="ground_truth_altitude">WGS84에서의 고도 (선택사항)</string>
+    <string name="set_ground_truth_title">정확도 측정</string>
+    <string name="set_ground_truth_subtitle">지도를 탭 하거나 실제 위치를 입력하세요.</string>
+    <string name="save">저장</string>
+    <string name="edit">수정</string>
+    <string name="ground_truth_marker_title">실제 위치</string>
+    <string name="ground_truth_invalid_location_title">잘못된 위치</string>
+    <string name="ground_truth_invalid_lat">위도는 -90 에서 90 사이의 10 진수 여야합니다</string>
+    <string name="ground_truth_invalid_long">경도는 -180과 180 사이의 10 진수 여야합니다</string>
+    <string name="ground_truth_invalid_alt">고도는 WGS84 기준으로써 미터 단위이어야 합니다</string>
+
+    <string name="horizontal_error_title">수평 오류</string>
+    <string name="vertical_error_title">수직 오류</string>
+    <string name="horizontal_error_label">오류</string>
+    <string name="measured_error_graph_label">측정 에러</string>
+    <string name="estimated_accuracy_graph_label">하드웨어에 의해 추정되는 정확도</string>
+    <string name="horizontal_vertical_error_label">H/V 오류</string>
+    <string name="avg_error_label">평균 %1$d 확정</string>
+    <string name="fix_number">확정 #</string>
+    <string name="show_radar_valid_location">실제 위치를 가져 왔습니다!</string>
+    <string name="show_radar_invalid_location">가져온 실제 위치가 유효하지 않습니다</string>
+
+    <!-- Sky view -->
+    <string name="sky_legend_title">범례</string>
+    <string name="sky_legend_shape_gnss_title">글로벌 위성 항법 시스템 (GNSS)</string>
+    <string name="sky_legend_shape_navstar">NAVSTAR GPS (미국)</string>
+    <string name="sky_legend_shape_glonass">GLONASS (러시아)</string>
+    <string name="sky_legend_shape_galileo">Galileo (유럽연합)</string>
+    <string name="sky_legend_shape_qzss">QZSS (일본)</string>
+    <string name="sky_legend_shape_beidou">BeiDou/COMPASS (중국)</string>
+    <string name="sky_legend_shape_sbas_title">위성 기반 보정 시스템 (SBAS)</string>
+    <string name="sky_legend_shape_waas">WAAS (미국)</string>
+    <string name="sky_legend_shape_egnos">EGNOS (유럽연합)</string>
+    <string name="sky_legend_shape_gagan">GAGAN (인도)</string>
+    <string name="sky_legend_shape_msas">MSAS (일본)</string>
+    <string name="sky_legend_shape_sdcm">SDCM (러시아)</string>
+    <string name="sky_legend_shape_snas">BDSBAS/SNAS (중국)</string>
+    <string name="sky_legend_shape_saccsa">SACCSA (ICAO)</string>
+
+    <string name="sky_legend_shape_availability_title">신호 가용성</string>
+    <string name="sky_legend_shape_not_in_view">기기에서 보이지 않음</string>
+    <string name="sky_legend_shape_in_view">보임</string>
+    <string name="sky_legend_shape_used_in_fix">위치 확정에 사용중</string>
+
+    <!-- GNSS Status callbacks -->
+    <string name="gnss_nav_msg_status_loc_disabled">GNSS 공급자 혹은 위치가 비활성화 상태입니다. 활성화 될때 까지 업데이트를 할 수 없습니다</string>
+    <string name="gnss_nav_msg_status_not_supported">기기사 GNSS Navigation 메시지 추적을 지원하지 않습니다</string>
+    <string name="gnss_nav_msg_status_ready">GNSS Navigation 메시지가 성공적으로 추적되고 있습니다</string>
+
+    <string name="gnss_measurement_status_loc_disabled">GNSS 공급자 혹은 위치가 비활성화 상태입니다. 활성화 될때 까지 업데이트를 할 수 없습니다</string>
+    <string name="gnss_measurement_status_not_supported">기기가 GNSS 측정치 추적을 지원하지 않습니다.</string>
+    <string name="gnss_measurement_status_ready">GNSS 측정치가 성공적으로 추적되고 있습니다</string>
+
+    <string name="gnss_status_unknown">알수 없는 상태 콜백</string>
+
+    <!-- Permissions -->
+    <string name="title_location_permission">위치 권한이 필요 합니다</string>
+    <string name="text_location_permission">GPSTest는 GNSS 데이터에 접근하기 위해 위치 권한이 필요합니다. 만약 \"다시 묻지 않기\" 를 선택 하셨다면 앱을 삭제 후 재설치 하거나 시스템 설정에서 직접 권한을 활성화 하셔야 합니다.</string>
+    <string name="ok">OK</string>
+    <string name="exit">나가기</string>
+
+    <!-- Send feedback -->
+    <string name="feedback_subject">GPSTest: 피드백</string>
+    <string name="feedback_body">불만, 찬사, 혹은 버그 리포트 모두 환영합니다!\n\n\n</string>
+    <!-- What's New -->
+    <string name="main_help_whatsnew_title">새로운 소식</string>
+    <string name="main_help_close">닫기</string>
+
+    <!-- Preferences -->
+    <string name="pref_title">설정</string>
+    <string name="pref_map_category_title">지도</string>
+    <string name="pref_map_type_title">지도 유형</string>
+    <string name="pref_map_type_summary">지도 타일 유형을 설정합니다</string>
+    <string name="pref_map_type_dialog_title">지도 유형을 선택하세요</string>
+
+    <string name="pref_rotate_map_with_compass_title">나침반으로 지도 회전 하기</string>
+    <string name="pref_rotate_map_with_compass_summary">사용자의 방향에서 따라 
+지도 방향을 바꿉니다
+</string>
+
+    <string name="pref_tilt_map_with_sensors_title">기기에 맞게 지도 기울이기</string>
+    <string name="pref_tilt_map_with_sensors_summary">기기를 잡고 있을때 
+1인칭 시점으로 지도를 바꿉니다.
+</string>
+
+    <string name="pref_gps_category_title">GNSS</string>
+    <string name="pref_auto_start_gps_title">GNSS 자동 시작</string>
+    <string name="pref_auto_start_gps_summary">앱 시작과 동시에 GNSS 시작</string>
+
+    <string name="pref_gps_min_time_title">인터벌</string>
+    <string name="pref_gps_min_time_summary">GNSS 확정간 시간 간격, 초 단위</string>
+    <string name="pref_gps_min_time_dialog_title">간격을 입력하세요, 초 단위</string>
+    <string name="pref_gps_min_time_invalid_entry">간격은 숫자로만 입력해야 합니다</string>
+
+    <string name="pref_use_gnss_apis_title">GNSS APIs 사용</string>
+    <string name="pref_use_gnss_apis_summary">안드로이드 7.0 혹은 그 이상에서 사용 가능하며 비활성화시
+legacy GPSStatus.Listener를 사용합니다.</string>
+
+    <string name="pref_gps_min_distance_title">최소 거리</string>
+    <string name="pref_gps_min_distance_summary">GNSS 확정간 최소 거리, 미터 단위
+</string>
+    <string name="pref_gps_min_distance_dialog_title">최소 거리를 입력하세요, 미터 단위</string>
+    <string name="pref_gps_min_distance_invalid_entry">최소 거리는 숫자여야 합니다</string>
+
+    <string name="pref_display_category_title">디스플레이</string>
+    <string name="pref_keep_screen_on_title">항상 화면 켜기</string>
+    <string name="pref_keep_screen_on_summary">화면이 꺼지는 것을 방지합니다</string>
+    <string name="pref_true_north_title">진북방향으로 나침반 표시</string>
+    <string name="pref_true_north_summary">나침반은 자북대신 진북으로 표시하게 됩니다.</string>
+
+    <!-- Output category -->
+    <string name="pref_output_category_title">로그 기록과 내보내기</string>
+    <string name="pref_output_category_summary">NMEA 기록, raw 측정치, 혹은 네비게이션 메시지를 파일 혹은 Android 스튜디오로 보내기</string>
+
+    <!-- Android Monitor Output -->
+    <string name="pref_as_output_category_title">Android Monitor로 내보내기</string>
+    <string name="pref_nmea_output_title">NMEA</string>
+    <string name="pref_as_nmea_output_summary">NMEA sentences 기록을 Android 스튜디오로 보내기</string>
+    <string name="pref_nmea_timestamp_output_title">NMEA 타임스탬프</string>
+    <string name="pref_nmea_timestamp_output_summary">NMEA 타임스탬프를 포함하여 내보내기</string>
+    <string name="pref_measurement_output_title">측정</string>
+    <string name="pref_as_measurement_output_summary">GNSS 측정 기록을 Android 스튜디오로 보내기
+(안드로이드 7.0 혹은 그 이상)
+</string>
+    <string name="pref_navigation_message_output_title">Navigation 메시지</string>
+    <string name="pref_as_navigation_message_output_summary">GNSS navigation 메시지를 Android
+스튜디오로 내보내기 (안드로이드 7.0 혹은 그 이상)
+</string>
+
+    <!-- File Output -->
+    <string name="pref_file_output_category_title">파일 내보내기</string>
+    <string name="pref_file_nmea_output_summary">NMEA sentences 기록을 파일로 내보내기</string>
+    <string name="pref_file_measurement_output_summary">GNSS 측정 기록을 파일로 보내기
+(안드로이드 7.0 혹은 그 이상)
+</string>
+    <string name="pref_file_navigation_message_output_summary">GNSS navigation 메시지를 파일로 기록 (안드로이드 7.0 혹은 그 이상)
+</string>
+    <string name="pref_file_location_output_title">위치</string>
+    <string name="pref_file_location_output_summary">위치확정의 세부 사항을 파일로 기록</string>
+    <string name="logging_to_new_file">새 파일로 기록: %1$s</string>
+    <string name="unable_to_close_all_file_streams">모든 파일 스트림을 닫을 수 없습니다.</string>
+    <string name="could_not_initialize_file">파일 초기화 실패: %1$s</string>
+    <string name="error_writing_file">파일 쓰기에 문제가 있습니다.</string>
+    <string name="pref_about_category_title">정보</string>
+    <string name="pref_show_tutorial_title">튜토리얼 보기</string>
+    <string name="pref_show_tutorial_summary">앱을 사용하는 방법 보기</string>
+
+    <string name="pref_dark_theme_title">어두운 테마 사용</string>
+    <string name="pref_dark_theme_summary">배경은 어두운 색으로 글씨는 밝은 색으로 표시 됩니다
+</string>
+
+    <string name="pref_coordinate_format_title">좌표 형식</string>
+    <string name="pref_coordinate_format_summary">십진수 도(DD), 도, 분 및 초(DMS) 혹은 십진수 분(DMM) 표기</string>
+    <string name="preferences_coordinate_format_dd">십진수 도</string>
+    <string name="preferences_coordinate_format_dms">도, 분 및 초</string>
+    <string name="preferences_coordinate_format_ddm">도 및 십진수 분</string>
+
+    <string name="preferences_preferred_distance_units_title">선호하는 거리 단위</string>
+    <string name="preferences_preferred_distance_units_option_meters">미터</string>
+    <string name="preferences_preferred_distance_units_option_feet">피트</string>
+
+    <string name="preferences_preferred_speed_units_title">선호하는 속도 단위</string>
+    <string name="preferences_preferred_speed_units_option_meters_per_second">초당 미터</string>
+    <string name="preferences_preferred_speed_units_option_kilometers_per_hour">시간당 킬로미터</string>
+    <string name="preferences_preferred_speed_units_option_miles_per_hour">시간당 마일</string>
+
+    <string name="pref_language_title">언어</string>
+    <string name="pref_language_summary">직접 앱의 언어 설정</string>
+    <string name="pref_language_dialog_title">언어 선택</string>
+
+    <!-- Help -->
+    <string name="title_help">도움말</string>
+
+    </resources>

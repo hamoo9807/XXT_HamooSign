@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/* //device/apps/common/assets/res/any/strings.xml
+**
+** Copyright 2008-2018 The Android Open Source Project, Sean J. Barbeau
+**
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
+**
+**     https://www.apache.org/licenses/LICENSE-2.0
+**
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
+** limitations under the License.
+*/
+-->
+<resources>
+    <!-- Fragments -->
+    <string name="gps_status_title">POLOHA</string>
+    <string name="gps_map_title">MAPA</string>
+    <string name="gps_sky_title">KOMPAS</string>
+    <string name="gps_accuracy_title">PŘESNOST</string>
+
+    <!-- Navigation Drawer -->
+    <string name="navdrawer_separator_assist_data">Upravit pomocné údaje</string>
+    <string name="force_psds_injection">Vložit údaje PSDS</string>
+    <string name="force_time_injection">Vložit časové údaje</string>
+    <string name="delete_aiding_data">Vymazat pomocné údaje</string>
+    <string name="navdrawer_item_settings">Nastavení</string>
+    <string name="navdrawer_item_help">Nápověda</string>
+    <string name="navdrawer_item_send_feedback">Zpětná vazba</string>
+    <string name="navdrawer_item_open_source">Navštívit GitHub</string>
+
+    <string name="navigation_drawer_open">Otevřít navigaci</string>
+    <string name="navigation_drawer_close">Zavřít navigaci</string>
+
+    <!-- GPS functionality -->
+    <string name="gps_start">Spustit</string>
+    <string name="gps_pause">Pozastavit</string>
+
+    <string name="delete_aiding_data_success">Pomocné údaje úspěšně vymazány.</string>
+    <string name="delete_aiding_data_failure">Zařízení nepodporuje vymazání pomocných údajů.</string>
+    <string name="gps_switch">VYP/ZAP</string>
+    <string name="share">Sdílet</string>
+    <string name="copied_to_clipboard">Poloha zkopírována do schránky</string>
+    <string name="send_log">Odesílání protokolu...</string>
+    <string name="log">Protokol</string>
+    <string name="file_name">Název souboru</string>
+    <string name="location">Poloha</string>
+    <string name="log_instructions">Povolte protokolování pro NMEA, prvotní měření, navigační zprávy, atd. v Nastavení.</string>
+    <string name="log_error">Chyba při výstupu protokolu do souboru. Povolili jste oprávnění pro přístup do úložiště? Zkuste znovu povolit možnost výstupu protokolu do souboru v Nastavení a po zobrazení výzvy klikněte na „Povolit“.</string>
+    <string name="no_location">Zkuste sdílet svou polohu po získání opravy GNSS...</string>
+    <string name="include_altitude">Zahrnout nadm. výšku</string>
+    <string name="set_fix_frequency">Nastavit frekvenci</string>
+    <string name="force_time_injection_success">Časové údaje úspěšně vloženy.</string>
+    <string name="force_time_injection_failure">Zařízení nepodporuje vkládání časových údajů.</string>
+
+    <string name="force_psds_injection_success">Údaje PSDS úspěšně vloženy.</string>
+    <string name="force_psds_injection_failure">Zařízení nepodporuje vkládání údajů PSDS.</string>
+
+    <string name="device">Zařízení</string>
+    <string name="upload_details">Nahraje možnosti Vašeho zařízení (např. značku a model zařízení, podporovaný GNSS, podporovaný SBAS, podpora obou frekvencí, atd.) do veřejné databáze zařízení GPSTest (https://bit.ly/gpstest-device-database).\n\nNejsou sdíleny žádné soukromé informace z Vašeho zařízení. </string>
+    <string name="upload_no_location">Přepněte na obrazovku Stav, počkejte na opravu GNSS a poté nahrajte možnosti zařízení. </string>
+    <string name="upload_success">Možnosti zařízení byly úspěšně nahrány!</string>
+    <string name="upload_failure">Nelze nahrát možnosti zařízení. Zkuste to znovu.</string>
+    <string name="upload_nothing_changed">Od posledního nahrání se nic nezměnilo. Zkuste to později znovu.</string>
+
+    <string name="zoom_in">Zvětšit</string>
+    <string name="zoom_out">Zmenšit</string>
+    <string name="mode_map">Mapa</string>
+    <string name="mode_satellite">Satelit</string>
+
+    <string name="latitude_label">Z. šířka:</string>
+    <string name="longitude_label">Z. délka:</string>
+    <string name="fix_time_label">Čas:</string>
+    <string name="ttff_label">TTFF:</string>
+    <string name="altitude_label">Výška (G):</string>
+    <string name="altitude_msl_label">Výška (M):</string>
+    <string name="accuracy_label">Přesn. (H):</string>
+    <string name="hor_and_vert_accuracy_label">Přesn. (H/V):</string>
+    <string name="speed_label">Rychlost:</string>
+    <string name="speed_acc_label">Přesn. (R):</string>
+    <string name="bearing_label">Poloha (S):</string>
+    <string name="bearing_acc_label">Přesn. (S):</string>
+    <string name="num_sats_label">Satelity:</string>
+    <string name="pdop_label">PDOP:</string>
+    <string name="hvdop_label">H/V DOP:</string>
+
+    <string name="id_column_label">ID</string>
+    <string name="gnss_flag_image_label">GNSS</string>
+    <string name="sbas_flag_image_label">SBAS</string>
+    <string name="cf_column_label">CF</string>
+    <string name="gps_snr_column_label">SNR</string>
+    <string name="gps_cn0_column_label">C/N0</string>
+    <string name="avg_cn0_label">Průměr</string>
+    <string name="elevation_column_label">Elev</string>
+    <string name="azimuth_column_label">Azim</string>
+    <string name="flags_aeu_column_label">Stav</string>
+    <string name="gps_not_supported">Zařízení pravděpodobně nepodporuje GNNS/GPS. Zkontrolujte nastavení systému.</string>
+    <string name="install">Instalovat</string>
+    <string name="no_thanks">NE, děkuji</string>
+    <string name="please_install_google_maps">Karta MAPA vyžaduje službu Mapy Google.</string>
+    <string name="enable_gps_message">GPS/GNSS je zakázáno. Povolit nyní?</string>
+    <string name="enable_gps_positive_button">Povolit GPS/GNSS</string>
+    <string name="enable_gps_negative_button">Ne</string>
+    <string name="gnss_running">Spustit GNSS s intervalem = %1$ss, min. vzdálenost = %2$sm</string>
+    <string name="clear_assist_warning_title">Vymazat pomocné údaje?</string>
+    <string name="clear_assist_warning">Některým zařízením může automatické obnovení asistenčních dat trvat až 24 hodin. Pokud Vaše zařízení nepodporuje ruční vložení, nemusí GNSS fungovat pro žádnou aplikaci, dokud nedokončí automatické obnovení. Jste si jistý?</string>
+    <string name="never_ask_again">Znovu se nedotazovat</string>
+    <string name="qr_code_instructions_title">Skenovat QR kód</string>
+    <string name="qr_code_instructions_text">Importujte pozemní umístění pomocí QR kódu ve formátu Geo URI (geo: 28.0587,-82.4139).  Vytvořte si vlastní QR kódy na: https://zxing.appspot.com/generator/.</string>
+    <string name="qr_code_cannot_read_code">Nelze z QR kódu přečíst Geo URI</string>
+    <string name="never_show_again">Příště nezobrazovat</string>
+    <string name="not_now">Nyní ne</string>
+    <string name="yes">ANO</string>
+    <string name="no">NE</string>
+    <string name="gnss_not_available">GNSS satelity (Global Navigation Satellite System) nejsou dostupné.</string>
+    <string name="sbas_not_available">SBAS satelity (Satellite-based Augmentation System) nejsou dostupné.</string>
+    <string name="menu_option_sort_by">Pořadí v seznamu podle</string>
+    <string name="menu_option_filter">Filtr</string>
+    <string name="filter_dialog_title">Zobrazit pouze tyto GNSS</string>
+    <string name="filter_text">Zobrazeno %1$d z %2$d satelitů</string>
+    <string name="filter_showall">(zobrazit vše)</string>
+    <string name="error_time_title">Neplatný čas GNNS</string>
+    <string name="error_time_message">Čas GNSS zařízení:\n\n%1$s\n\n…je větší než %2$d dny, které jsou odlišné od Vašich systémových hodin. To může být způsobeno problémem s přechodem na týdenní GPS - požádejte o podrobnosti výrobce zařízení. Více na: https://bit.ly/gps-week-rollover.</string>
+    <string name="unknown">Neznámý</string>
+    <string name="cancel">Zrušit</string>
+
+    <!-- Map view -->
+    <string name="ground_truth_latitude">Zeměpisná šířka</string>
+    <string name="ground_truth_longitude">Zeměpisná délka</string>
+    <string name="ground_truth_altitude">Nadmořská výška (nepovinné)</string>
+    <string name="set_ground_truth_title">Přesnost měření</string>
+    <string name="set_ground_truth_subtitle">Klikněte na mapu nebo zadejte svou polohu.</string>
+    <string name="save">Uložit</string>
+    <string name="edit">Upravit</string>
+    <string name="ground_truth_marker_title">Skutečná poloha</string>
+    <string name="ground_truth_invalid_location_title">Neplatná poloha</string>
+    <string name="ground_truth_invalid_lat">Hodnota zeměpisné šířky musí být ve stupních od -90° do +90° .</string>
+    <string name="ground_truth_invalid_long">Hodnota zeměpisné délky musí být ve stupních od -180° do +180°.</string>
+    <string name="ground_truth_invalid_alt">Hodnota nadmořské výšky (WGS84) musí být v metrech.</string>
+
+    <string name="horizontal_error_title">Horizontální chyba</string>
+    <string name="vertical_error_title">Vertikální chyba</string>
+    <string name="horizontal_error_label">Chyba</string>
+    <string name="measured_error_graph_label">Chyba měření</string>
+    <string name="estimated_accuracy_graph_label">Přesnost odhadnuta HW</string>
+    <string name="horizontal_vertical_error_label">Chyba přesnosti H/V</string>
+    <string name="avg_error_label">Průměr %1$d opr.</string>
+    <string name="fix_number">Průměr</string>
+    <string name="show_radar_valid_location">Poloha importována!</string>
+    <string name="show_radar_invalid_location">Importovaná poloha je neplatná</string>
+
+    <!-- Sky view -->
+    <string name="sky_legend_title">Popis</string>
+    <string name="sky_legend_shape_gnss_title">Global Navigation Satellite Systems (GNSS)</string>
+    <string name="sky_legend_shape_navstar">NAVSTAR GPS (USA)</string>
+    <string name="sky_legend_shape_glonass">GLONASS (Russia)</string>
+    <string name="sky_legend_shape_galileo">Galileo (European Union)</string>
+    <string name="sky_legend_shape_qzss">QZSS (Japan)</string>
+    <string name="sky_legend_shape_beidou">BeiDou/COMPASS (China)</string>
+    <string name="sky_legend_shape_irnss">IRNSS/NavIC (India)</string>
+
+    <string name="sky_legend_shape_sbas_title">Satellite-based Augmentation Systems (SBAS)</string>
+    <string name="sky_legend_shape_waas">WAAS (USA)</string>
+    <string name="sky_legend_shape_egnos">EGNOS (European Union)</string>
+    <string name="sky_legend_shape_gagan">GAGAN (India)</string>
+    <string name="sky_legend_shape_msas">MSAS (Japan)</string>
+    <string name="sky_legend_shape_sdcm">SDCM (Russia)</string>
+    <string name="sky_legend_shape_snas">BDSBAS/SNAS (China)</string>
+    <string name="sky_legend_shape_saccsa">SACCSA (ICAO)</string>
+
+    <string name="sky_legend_shape_availability_title">Dostupnost signálu</string>
+    <string name="sky_legend_shape_not_in_view">Satelity, které nejsou v zorném poli zařízení</string>
+    <string name="sky_legend_shape_in_view">Satelity, které jsou v zorném poli zařízení</string>
+    <string name="sky_legend_shape_used_in_fix"> Satelity, které jsou připojené pro stanovení polohy</string>
+
+    <!-- GNSS Status callbacks -->
+    <string name="gnss_nav_msg_status_loc_disabled">Poskytování GNSS nebo polohy je zakázáno. Pro aktualizaci polohy povolte GPS.</string>
+    <string name="gnss_nav_msg_status_not_supported">Zařízení nepodporuje navigační zprávy GNSS.</string>
+    <string name="gnss_nav_msg_status_ready">Navigační zprávy GNSS úspěšně vytvořeny.</string>
+
+    <string name="gnss_measurement_status_loc_disabled">Poskytování GNSS nebo polohy je zakázáno. Pro aktualizaci polohy povolte GPS.</string>
+    <string name="gnss_measurement_status_not_supported">Zařízení nepodporuje protokoly měření GNSS.</string>
+    <string name="gnss_measurement_status_ready">Protokoly měření GNSS úspěšně vytvořeny.</string>
+
+    <string name="gnss_status_unknown">Neznámý stav</string>
+
+    <!-- Permissions -->
+    <string name="title_location_permission">Vyžadováno oprávnění pro určení polohy.</string>
+    <string name="text_location_permission">Aplikace GPSTest vyžaduje přístup k poloze pro zobrazení dat GNSS. Jestliže jste vybrali \"Znovu se nedotazovat\" bude potřeba přeinstalovat aplikaci nebo povolit požadované oprávnění v nastavení systému.</string>
+    <string name="ok">OK</string>
+    <string name="exit">KONEC</string>
+
+    <!-- Send feedback -->
+    <string name="feedback_subject">GPSTest: Zpětná vazba</string>
+    <string name="feedback_body">Zprávy o chybách jsou vítány!\n\n\n</string>
+    <string name="feedback_error">Nelze odeslat zpětnou vazbu. Nebyla nalezena žádná vhodná aplikace. </string>
+    <string name="device_properties_upload_success">Vlastnosti zařízení byly úspěšně nahrány. Děkujeme!</string>
+
+    <!-- What's New -->
+    <string name="main_help_whatsnew_title">Co je nového?</string>
+    <string name="main_help_whatsnew">&#8226;\u0020
+        <b>Možnosti zdrojového zařízení</b>
+        - Volitelný příspěvek s možnostmi Vašeho zařízení do veřejné databáze GPSTest (https://bit.ly/gpstest-device-database) prostřednictvím obrazovky Sdílet . Více na: https://bit.ly/gpstest-database-article.\n&#8226;\u0020
+        <b>Výstup protokolů s podrobnostmi antény</b>
+        - Podpora výstupu protokolu s informacemi o anténě GNSS do CSV a JSON files.\n&#8226;\u0020
+        <b>Přidán finský překlad</b>
+        -  Poděkování Ari Nygard!\n&#8226;\u0020
+        <b>Přidán dánský překlad</b>
+        -  Poděkování Claus Østergaard!\n&#8226;\u0020
+        <b>Oprava chyb</b>
+        - Více na: https://bit.ly/gpstest-releases
+    </string>
+    <string name="main_help_close">Zavřít</string>
+
+    <!-- Preferences -->
+    <string name="pref_title">Nastavení</string>
+    <string name="pref_map_category_title">Mapa</string>
+    <string name="pref_map_type_title">Typ mapy</string>
+    <string name="pref_map_type_summary">Nastavte typ zobrazení mapy.</string>
+    <string name="pref_map_type_dialog_title">Vyberte typ zobrazení mapy</string>
+
+    <string name="pref_rotate_map_with_compass_title">Otáčet mapu</string>
+    <string name="pref_rotate_map_with_compass_summary">Změňte orientaci zobrazení mapy pomocí zařízení.</string>
+
+    <string name="pref_tilt_map_with_sensors_title">Naklápět mapu</string>
+    <string name="pref_tilt_map_with_sensors_summary">Změňte úhel zobrazení mapy pomocí zařízení.</string>
+
+    <string name="pref_gps_category_title">GNSS</string>
+    <string name="pref_auto_start_gps_title">Automatické spuštění GNSS</string>
+    <string name="pref_auto_start_gps_summary">Nastavte automatické spuštění GNSS při spouštění aplikace.</string>
+
+    <string name="pref_gps_min_time_title">Interval</string>
+    <string name="pref_gps_min_time_summary">Nastavte čas mezi připojením GNSS v sekundách.</string>
+    <string name="pref_gps_min_time_dialog_title">Zadejte interval v sekundách</string>
+    <string name="pref_gps_min_time_invalid_entry">Interval musí být číslo.</string>
+
+    <string name="pref_use_gnss_apis_title">Použít pro GNSS rozhraní API</string>
+    <string name="pref_use_gnss_apis_summary">Použijte jen pro Android 7.0 a vyšší. Pokud není zaškrtnuto, je použit starší modul GPSStatus.Listener.</string>
+
+    <string name="pref_gps_min_distance_title">Minimální vzdálenost</string>
+    <string name="pref_gps_min_distance_summary">Nastavte min. vzdálenost mezi připojením GNSS v metrech.</string>
+    <string name="pref_gps_min_distance_dialog_title">Zadejte min. vzdálenost v metrech</string>
+    <string name="pref_gps_min_distance_invalid_entry">Min. vzdálenost musí být číslo.</string>
+
+    <string name="pref_display_category_title">Zobrazení</string>
+    <string name="pref_keep_screen_on_title">Zapnout obrazovku</string>
+    <string name="pref_keep_screen_on_summary">Zamezte vypnutí obrazovky.</string>
+    <string name="pref_true_north_title">Zobrazit pravý sever</string>
+    <string name="pref_true_north_summary">Zobrazte v kompasu pravý sever místo magnetického.</string>
+
+    <!-- Output category -->
+    <string name="pref_output_category_title">Protokoly a výstup</string>
+    <string name="pref_output_category_summary">Nastavte výstup protokolů do souboru nebo do Android Studio.</string>
+
+    <!-- Android Monitor Output -->
+    <string name="pref_as_output_category_title">Výstup Android Monitor</string>
+    <string name="pref_nmea_output_title">Protokoly NMEA</string>
+    <string name="pref_as_nmea_output_summary">Povolte výstup protokolů NMEA do Android Studio.</string>
+    <string name="pref_nmea_timestamp_output_title">Časová značka NMEA</string>
+    <string name="pref_nmea_timestamp_output_summary">Použijte časovou značku NMEA ve výstupu.</string>
+    <string name="pref_measurement_output_title">Protokoly měření GNSS</string>
+    <string name="pref_as_measurement_output_summary">Povolte výstup protokolů měření GNSS do Android Studio (Android 7.0 a vyšší).</string>
+    <string name="pref_navigation_message_output_title">Navigační zprávy GNSS</string>
+    <string name="pref_as_navigation_message_output_summary">Povolte výstup navigačních zpráv GNSS do Android Studio (Android 7.0 a vyšší).</string>
+
+    <!-- File Output -->
+    <string name="pref_file_output_category_title">Výstup souboru</string>
+    <string name="pref_file_nmea_output_summary">Povolte výstup protokolů NMEA do souboru.</string>
+    <string name="pref_file_measurement_output_summary">Povolte výstup protokolů měření GNSS do souboru (Android 7.0 a vyšší).</string>
+    <string name="pref_file_navigation_message_output_summary">Povolte výstup navigačních zpráv GNSS do souboru (Android 7.0 a vyšší).</string>
+    <string name="pref_file_location_output_title">Protokoly oprav polohy</string>
+    <string name="pref_file_location_output_summary">Povolte výstup protokolů oprav polohy do souboru.</string>
+    <string name="pref_file_antenna_output_csv_title">Informace o anténě (CSV)</string>
+    <string name="pref_file_antenna_output_csv_summary">Povolte výstup protokolů s podrobnostmi antény GNSS do souboru CSV. Tato funkce je k dispozici pouze na podporovaných zařízeních. (Android 11 a vyšší). </string>
+    <string name="pref_file_antenna_output_json_title">Informace o anténě (JSON)</string>
+    <string name="pref_file_antenna_output_json_summary">Povolte výstup protokolů s podrobnostmi antény GNSS do souboru JSON. Tato funkce je k dispozici pouze na podporovaných zařízeních. (Android 11 a vyšší).</string>
+
+    <string name="logging_to_new_file">Výstup protokolu do nového souboru: %1$s</string>
+    <string name="unable_to_close_all_file_streams">Nelze zavřít všechny soubory se streamy.</string>
+    <string name="could_not_initialize_file">Nelze inicializovat soubor: %1$s</string>
+    <string name="error_writing_file">Chyba zápisu do souboru.</string>
+    <string name="unable_to_open_json_generator">Nelze otevřít generátor JSON</string>
+
+    <string name="pref_about_category_title">O aplikaci</string>
+    <string name="pref_show_tutorial_title">Zobrazit průvodce aplikací</string>
+    <string name="pref_show_tutorial_summary">Zobrazte průvodce pro použití aplikace.</string>
+
+    <string name="pref_dark_theme_title">Použít tmavé téma</string>
+    <string name="pref_dark_theme_summary">Nastavte tmavou barvu pozadí.</string>
+
+    <string name="pref_coordinate_format_title">Formát souřadnic</string>
+    <string name="pref_coordinate_format_summary">Nastavte formát souřadnic.</string>
+    <string name="preferences_coordinate_format_dd">Desetiny stupňů</string>
+    <string name="preferences_coordinate_format_dms">Stupně, minuty, desetiny sekund</string>
+    <string name="preferences_coordinate_format_ddm">Stupně, desetiny minut</string>
+
+    <string name="preferences_preferred_distance_units_title">Jednotky vzdálenosti</string>
+    <string name="preferences_preferred_distance_units_option_meters">Metr</string>
+    <string name="preferences_preferred_distance_units_option_feet">Stopa</string>
+
+    <string name="preferences_preferred_speed_units_title">Jednotky rychlosti</string>
+    <string name="preferences_preferred_speed_units_option_meters_per_second">Metr za sekundu</string>
+    <string name="preferences_preferred_speed_units_option_kilometers_per_hour">Kilomentr za hodinu</string>
+    <string name="preferences_preferred_speed_units_option_miles_per_hour">Míle za hodinu</string>
+
+    <string name="pref_language_title">Jazyk</string>
+    <string name="pref_language_summary">Nastavte jazyk prostředí aplikace.</string>
+    <string name="pref_language_dialog_title">Vyberte jazyk</string>
+
+    <!-- Help -->
+    <string name="title_help">Nápověda</string>
+
+    <string name="help_text">
+        <b>Často kladené otázky (FAQ)</b>
+        - https://github.com/barbeau/gpstest/blob/master/FAQ.md\n\n
+
+        <b>*** Zobrazení stavu ***</b>\n\n&#8226;\u0020
+        <b>Zem. šířka</b>
+        - Zeměpisná šířka v desetinách stupňů (WGS84).\n&#8226;\u0020
+        <b>Zem. délka</b>
+        - Zeměpisná délka v desetinách stupňů (WGS84).\n&#8226;\u0020
+        <b>Nadm. výška (GEOID)</b>
+        - Nadmořská výška v metrech při střední hladině světových oceánů (WGS84).\n&#8226;\u0020
+        <b>Nadm. výška (MSL)</b>
+        - Nadmořská výška v metrech při střední hladině moře (vyžadována podpora NMEA).\n&#8226;\u0020
+        <b>Přesnost (H)</b>
+        - Odhadovaná přesnost horizontální polohy (poloměr v metrech, spolehlivost 68%). Jinými slovy, pokud nakreslíte kruh v této zeměpisné šířce a délce s poloměrem rovným přesnosti, pak existuje 68% pravděpodobnost, že skutečná poloha je uvnitř kruhu. Více na: https://medium.com/@sjbarbeau/measuring-gnss-accuracy-on-android-devices-6824492a1389\n&#8226;\u0020
+        <b>Přesnost (H/V)</b>
+        - Odhadovaná přesnost horizontální a vertikální polohy (spolehlivost 68%). Přesnost horizontální polohy je definována výše. Pro přesnost vertikální polohy je vyžadován Android 8.0 a vyšší. Příklad přesnosti vertikální polohy: je-li nadmořská výška (GEOID) 150 m a přesnost vertikální polohy 20 m, pak existuje 68% pravděpodobnost skutečné výšky mezi 130 m a 170 m. Více na: https://medium.com/@sjbarbeau/measuring-gnss-accuracy-on-android-devices-6824492a1389\n&#8226;\u0020
+        <b>Rychlost</b>
+        - Rychlost nad zemí v metrech za sekundu.\n&#8226;\u0020
+        <b>Přesnost (R)</b>
+        - Odhadovaná přesnost rychlosti polohy v metrech za sekundu (spolehlivost 68%). Příklad přesnosti rychlosti: je-li rychlost 5 m/s a přesnost rychlosti 1 m/s, pak existuje 68% pravděpodobnost skutečné rychlosti mezi 4 m/s a 6 m/s.\n&#8226;\u0020
+        <b>Poloha (S)</b>
+        - Horizontální poloha směru k cíli (směr pohybu zařízení) ve stupních (0° - 360°), nesouvisí s orientací zařízení.\n&#8226;\u0020
+        <b>Přesnost (S)</b>
+        - Odhadovaná přesnost polohy směru k cíli ve stupních (spolehlivost 68%). Příklad přesnosti polohy: je-li poloha směru k cíli 60° a přesnost polohy 10°, pak existuje 68% pravděpodobnost skutečné polohy mezi 50° a 70°.\n&#8226;\u0020
+        <b>Satelity</b>
+        - Počet připojených satelitů / Počet viditelných satelitů / Počet známých satelitů. Na dvoufrekvenčních zařízeních je satelit zobrazen jako připojený, pokud je použita alespoň jedna frekvence tohoto satelitu. Satelit je zobrazen jako viditelný, pokud má alespoň jeden signál s platnou hodnotu síly signálu. Satelit je zobrazen jako známý pro zařízení, pokud existuje informace o alespoň jednom signálu ze satelitu.\n&#8226;\u0020
+        <b>PDOP</b>
+        - 3D poměr přesnosti polohy (vyžadována podpora NMEA).\n&#8226;\u0020
+        <b>H/V DOP</b>
+        - 2D (H/V) poměr přesnosti polohy (vyžadována podpora NMEA).\n&#8226;\u0020
+        <b>TTFF</b>
+        - Čas prvního připojení.\n&#8226;\u0020
+        <b>ID nebo PRN</b>
+        - Identifikátor satelitu (PseudoRandom Noise for GPS).\n&#8226;\u0020
+        <b>CF</b>
+        - Označení nosiče kmitočtu sledovaného signálu (např. \\"L1\\"). Pokud je kmitočet neznámý, je zobrazen jako neupravený kmitočet v MHz (vyžadován Android 8.0 a vyšší, nepodporují všechna zařízení). Nový signál GLONASS CDMA pro \\"L1\\" je zobrazen jako \\"L1-C\\".\n&#8226;\u0020
+        <b>SNR</b>
+        - Síla úrovně signálu (Signal-to-Noise Ratio, vyžadován Android M a nižš). Více na: https://bit.ly/SNR-CN0\n&#8226;\u0020
+        <b>C/N0</b>
+        - Síla úrovně signálu (Carrier-to-N0ise density, vyžadován Android N a vyšší). Více na: http://bit.ly/SNR-CN0\n&#8226;\u0020
+        <b>Elev</b>
+        - Výškový úhel (Elevace) ve stupních.\n&#8226;\u0020
+        <b>Azim</b>
+        - Směrový úhel (Azimut) ve stupních.\n&#8226;\u0020
+        <b>Stav</b>
+        - (E) pokud zařízení přijímá efemeridové údaje pro satelit, (A) pokud zařízení přijímá almanachové údaje pro satelit, (U) pokud byl připojený satelit použit při výpočtu poslední polohy. 
+        Pro SBAS satelity systém Android specificky neuvádí, zda označení (U) odkazuje na zdánlivou vzdálenost připojeného satelitu, která je používána pro stanovení pozice nebo ke korekčním informacím.\n\n
+
+         <b>Vložit údaje PSDS</b>
+         - Vyžaduje, aby zařízení obnovilo předpokládanou satelitní datovou službu (Predicted Satellite Data Service) - např. údaje XTRA, pokud zařízení používá údaje PSDS.\n\n
+
+        <b>*** Zobrazení kompasu ***</b>\n\n&#8226;\u0020
+        <b>GPS (USA Navstar)</b>
+        - kruh\n&#8226;\u0020
+        <b>GLONASS (Russia)</b>
+        - čtverec\n&#8226;\u0020
+        <b>Galileo (European Union)</b>
+        - trojúhelník\n&#8226;\u0020
+        <b>QZSS (Japan)</b>
+        - Hexagons\n&#8226;\u0020
+        <b>BeiDou/COMPASS (China)</b>
+        - pětiúhelník\n&#8226;\u0020
+        <b>IRNSS (India)</b>
+        - ovál\n&#8226;\u0020
+        <b>SBAS (WAAS, EGNOS, GAGAN, MSAS, SDCM, SNAS, SACCSA)</b>
+        - kosočtverec\n\n
+
+        &#8226;\u0020 Transparentní zobrazení - nepřipojené satelity, které nejsou v zorném poli zařízení\n
+        &#8226;\u0020 Zobrazení s tenkým obrysem - nepřipojené satelity, které jsou v zorném poli zařízení\n
+        &#8226;\u0020 Zobrazení se silným obrysem - připojené satelity pro stanovení polohy, které jsou v zorném poli zařízení\n\n
+
+        &#8226;\u0020 Rozsah hodnoty SNR je od 0 dB (červené ozn.) do 30 dB (zelené ozn.) - vyžadován Android 6.0 a nižší. \n
+        &#8226;\u0020 Rozsah hodnoty SNR je od 10 dB (červené ozn.) do 45 dB (zelené ozn.) - vyžadován Android 7.0 a vyšší. \n
+        &#8226;\u0020 Rozsah hodnoty C/N0 je od 10 dB-Hz (červené ozn.) do 45 dB-Hz (zelené ozn.) - vyžadován Android 7.0 a vyšší. \n
+        &#8226;\u0020Jestliže neexistuje žádná hodnota pro SNR nebo C/N0 (tj. satelit není v zorném poli zařízení), bude mít transparentní zobrazení světle šedou barvou. \n\n
+
+        <b>*** Zobrazení přesnosti ***</b>\n\n&#8226;\u0020
+        <b>Vertikální chyba</b>
+        - Na rozdíl od chyby horizontálního měření, může mít chyba vertikálního měření hodnotu kladnou nebo zápornou. Pro zobrazení hodnoty vertikální a průměrné vertikální chyby se výpočet provádí pomocí naměřených absolutních hodnot chyby.\n\n
+
+        &#8226;\u0020Pomocí QR kódů můžete rychle nastavit svou skutečnou polohu. Více na: http://bit.ly/gpstest-qr-codes\n\n
+
+        <b>*** Protokoly a výstup ***</b>\n\n
+        &#8226;\u0020Povolte výstup protokolů NMEA, navigačních zpráv GNSS, protokolů měření GNSS a protokolů oprav polohy. Více na: http://bit.ly/gpstest-file for details\n\n
+
+        <b>*** Poděkování ***</b>\n\n
+        &#8226;\u0020 <b>Mike Lockwood</b> - original developer for v1.x\n
+        &#8226;\u0020 <b>Sean Barbeau</b> - developer for v2.x and higher\n
+        &#8226;\u0020 GPSTest launcher icon is derived from the Android Material Design \"satellite\" icon, licensed by Google under Apache v2.0.  Other Google material design icons are also used under Apache v2.0. QR code icon by Austin Andrews from https://materialdesignicons.com/icon/qrcode.\n
+        &#8226;\u0020 Chinese translation provided by wangkf, liuyunli, SakuraSa233 &amp; Skimige\n
+        &#8226;\u0020 German translation provided by SIRSteiner\n
+        &#8226;\u0020 Dutch translation provided by Dennis Dolman, Meteor0id\n
+        &#8226;\u0020 Greek translation provided by Jimmy Golfi\n
+        &#8226;\u0020 Japanese translation provided by SakuraSa233\n
+        &#8226;\u0020 Czech translation provided by llzn.cz\n
+        &#8226;\u0020 Italian translation provided by Giolly90\n
+        &#8226;\u0020 Spanish translation provided by Sergi Pellicer\n
+        &#8226;\u0020 Indonesian translation provided by Adiitya Andre90\n
+        &#8226;\u0020 Polish translation provided by Adam Wandelt\n
+        &#8226;\u0020 French translation provided by Olivier Merlin &amp; Jérémy Belloir\n
+        &#8226;\u0020 Persian translation provided by Iman (imni)\n
+        &#8226;\u0020 Ukrainian translation provided by Serhii Osmalchuk\n
+        &#8226;\u0020 Korean translation provided by snotree\n
+        &#8226;\u0020 Basque translation provided by Alexander Gabilondo\n
+        &#8226;\u0020 Finnish translation provided by Ari Nygard\n
+        &#8226;\u0020 Danish translation provided by Claus Østergaard\n
+    </string>
+</resources>

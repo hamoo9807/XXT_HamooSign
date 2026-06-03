@@ -1,0 +1,467 @@
+package com.cofbro.qian.utils
+
+import android.content.Context
+import com.cofbro.hymvvmutils.base.BaseResponse
+import com.cofbro.hymvvmutils.base.DataState
+import com.cofbro.qian.mapsetting.viewmodel.MapViewModel
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.Interceptor
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody
+import okhttp3.Response
+import java.io.File
+import java.io.IOException
+import java.nio.charset.Charset
+import java.util.concurrent.TimeUnit
+import javax.crypto.Cipher
+import javax.crypto.spec.IvParameterSpec
+import javax.crypto.spec.SecretKeySpec
+import android.util.Base64
+import kotlin.random.Random
+
+object NetworkUtils {
+    private val cookieRefreshInterceptor = Interceptor { chain ->
+        val originalRequest = chain.request()
+        val response = chain.proceed(originalRequest)
+        val context = appContext
+        if (context != null && CookieRefresher.isResponseCookieExpired(response)) {
+            val refreshed = CookieRefresher.refreshIfNeeded(context)
+            if (refreshed) {
+                response.close()  // 只在刷新成功后关闭旧response
+                val newCookies = CacheUtils.getCurrentCookies()
+                val newRequest = originalRequest.newBuilder()
+                    .header("cookie", newCookies)
+                    .build()
+                return@Interceptor chain.proceed(newRequest)
+            }
+            // 刷新失败, 返回原始response（未关闭）
+        }
+        response
+    }
+
+    private var appContext: Context? = null
+
+    fun init(context: Context) {
+        appContext = context.applicationContext
+    }
+
+    private val client = OkHttpClient.Builder()
+        .connectTimeout(8, TimeUnit.SECONDS)
+        .readTimeout(8, TimeUnit.SECONDS)
+        .writeTimeout(8, TimeUnit.SECONDS)
+        .addInterceptor(cookieRefreshInterceptor)
+        .build()
+
+    fun buildClientRequest(
+        url: String,
+        cookies: String = CacheUtils.getCurrentCookies()
+    ): Request {
+        return Request.Builder().url(url)
+            .addHeader("Accept-Language", "zh-Hans-CN;q=1, zh-Hant-CN;q=0.9")
+            .addHeader("cookie", cookies)
+            .addHeader("Accept-Encoding", "identity")
+            .addHeader(
+                "User-Agent",
+                "Mozilla/5.0 (iPhone; CPU iPhone OS 14_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 com.ssreader.ChaoXingStudy/ChaoXingStudy_3_4.8_ios_phone_202012052220_56 (@Kalimdor)_12787186548451577248"
+            )
+            .build()
+    }
+
+    // JSESSIONID=51B25EAF937E0757E100B977F7FACBB7;lv=1;fid=1840;_uid=191970813;uf=b2d2c93beefa90dc93c9630a50f043aeda1b3f5cd81016ee88537765d90e85ee0c42a7f8a90a57eb9f01a45bdf49a560913b662843f1f4ad6d92e371d7fdf6444fff2d625c300bdece71fc6e59483dd394fca3980c580733ee02e425eae127e68d25a207f4287285;_d=1696861493434;UID=191970813;vc=FE33F1E68D32575DE45D383055F41CD9;vc2=D231DAB691B835CBA8EA4C28AA22C80D;vc3=f3AH%2FaTzO0OWmssrxWoMhsseq0wmWlKHlG6BqMC2topAdQtQmni5EKygJ7bbpcAVkrNbRxlKzGrHQFS4lNlUynFjpyH4wah0kKPItVVhsPQVeDkygUN7mptPgrI9lBBLm4Ol%2BhkL17YX5S9KEDLPhin41vdL8qmtsmYoZHzdNyk%3D45b63736ade334d1ab315f83162795b4;cx_p_token=389c80050755ad413b4b9fbfb1c07455;xxtenc=6c17eaa61e93f279ff6c0784a7f75d7a;DSSTASH_LOG=C_38-UN_97-US_191970813-T_1696861493435;route=52ffa9af7a380e114204ed76732d509c;
+    // route=44030bc8a3c0af15b8ff79c9243587ed; source=""; spaceFid=1840; spaceRoleId=""; thirdRegist=0; __utma=68824131.692444529.1684077888.1684077888.1684077888.1; __utmc=68824131; __utmz=68824131.1684077888.1.1.utmcsr=passport2.chaoxing.com|utmccn=(referral)|utmcmd=referral|utmcct=/; lv=1; fid=1840; tl=1; _dd191970731=1696859714682; fanyamoocs=CF009EED2A0703198351C072BAF36DBE; _dd191970813=1696859718210; JSESSIONID=782AC9263AF950CC9206731BB9AE74D7; route_mobilelearn=ff6ad8bf549bb7fabcec3f63a89e27e4; _uid=191970731; uf=b2d2c93beefa90dc93c9630a50f043aeda1b3f5cd81016ee4953b6cc0fb961400c42a7f8a90a57ebec4865a2458c6765913b662843f1f4ad6d92e371d7fdf6444fff2d625c300bdece71fc6e59483dd394fca3980c58073334c16dcee04a739d40cc32c0f7c81d22; _d=1696859975779; UID=191970731; vc=A36D3FA84461C0CAF4688A251F03960D; vc2=464A347B391020FA611A3EDB588C71A1; vc3=cVlD6V2OXwxsPLfG%2Fh83Pp8%2FleLwQwSkYnay0mmdy%2BrPn9Aa%2F9XhCKgMmWk6JZdaYmfzQDOsfHXoEqlTMaSYhHOmPRj8jPB2WeTp75Wd1VUeYbmfyb1TKftVS2W%2F50FFAQSaQ3eJcCPcr89o4uGw%2FXAilX6aeQGrLVxO6ck57fU%3Df79d6f53e19dd2e175ec704a14d872c5; cx_p_token=fc00f25cfb9a88f654a01abc68a64590; xxtenc=4f52dce523c9cd8492b6a11267f9eade; DSSTASH_LOG=C_38-UN_97-US_191970731-T_1696859975780; route_widget=ca138d512584d6764e762fa0549299ef
+    fun buildServerRequest(url: String, cookies: String = CacheUtils.getCurrentCookies()): Request {
+        return Request.Builder().url(url)
+            .addHeader("Accept-Language", "zh-Hans-CN;q=1, zh-Hant-CN;q=0.9")
+            .addHeader("cookie", cookies)
+            .addHeader(
+                "Referer",
+                "https://mooc1-2.chaoxing.com/visit/interaction?s=a5913ee5215774a303a05e9c9358f603"
+            )
+            .addHeader("Sec-Ch-Ua-Mobile", "?0")
+            .addHeader("Sec-Ch-Ua-", "Windows")
+            .addHeader("Sec-Fetch-Site", "same-origin")
+            .addHeader("navigate", "Sec-Fetch-Mode")
+            .addHeader("Sec-Fetch-User", "?1")
+            .addHeader(
+                "Sec-Ch-Ua",
+                "Google Chrome\";v=\"117\", \"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"117"
+            )
+            .addHeader(
+                "Accept",
+                "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7"
+            )
+            .addHeader(
+                "User-Agent",
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36 Edg/117.0.2045.60"
+            )
+            .build()
+    }
+
+    fun request(clientRequest: Request): BaseResponse<Response> {
+        val call = client.newCall(clientRequest)
+        val response = BaseResponse<Response>()
+        response.dataState = DataState.STATE_INITIALIZE
+        response.data = call.execute()
+        return response
+    }
+
+    fun request(url: String): BaseResponse<Response> {
+        val request = Request.Builder().url(url).build()
+        val call = client.newCall(request)
+        val response = BaseResponse<Response>()
+        response.dataState = DataState.STATE_INITIALIZE
+        response.data = call.execute()
+        return response
+    }
+
+    fun post(url: String, file: File): BaseResponse<Response> {
+        val uid = CacheUtils.cache["uid"] ?: ""
+        val cookies = CacheUtils.getCookies(uid)
+        val body: RequestBody = MultipartBody.Builder()
+            .setType(MultipartBody.FORM)
+            .addFormDataPart(
+                "file", file.name,
+                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), file)
+            )
+            .addFormDataPart("puid", uid)
+            .build()
+        val request = Request.Builder().url(url)
+            .addHeader("Accept-Language", "zh-Hans-CN;q=1, zh-Hant-CN;q=0.9")
+            .addHeader("cookie", cookies)
+            .addHeader(
+                "User-Agent",
+                "Mozilla/5.0 (iPhone; CPU iPhone OS 14_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 com.ssreader.ChaoXingStudy/ChaoXingStudy_3_4.8_ios_phone_202012052220_56 (@Kalimdor)_12787186548451577248"
+            )
+            .post(body).build()
+        val call = client.newCall(request)
+        val response = BaseResponse<Response>()
+        response.dataState = DataState.STATE_INITIALIZE
+        response.data = call.execute()
+        return response
+    }
+
+
+    fun post(url: String, text: String): BaseResponse<Response> {
+        val cookies = CacheUtils.getCurrentCookies()
+        val size = text.toByteArray(Charset.defaultCharset()).size.toString()
+        val body = RequestBody.create("raw; charset=utf-8".toMediaTypeOrNull(), text)
+        val request = Request.Builder()
+            .url(url)
+            .addHeader(
+                "cookie",
+                cookies
+            )
+            .addHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
+            .addHeader("Content-Length", size)
+            .addHeader("Host", "mooc1.chaoxing.com")
+            .addHeader(
+                "User-Agent",
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36 Edg/117.0.2045.60"
+            )
+            .post(body).build()
+        val call = client.newCall(request)
+        val response = BaseResponse<Response>()
+        response.dataState = DataState.STATE_INITIALIZE
+        response.data = call.execute()
+        return response
+    }
+
+    fun post2(url: String, file: File): BaseResponse<Response> {
+        val uid = CacheUtils.cache["uid"] ?: ""
+        val cookies = CacheUtils.getCookies(uid)
+        val body = MultipartBody.Builder()
+            .setType(MultipartBody.FORM)
+            .addFormDataPart("id", "WU_FILE_0")
+            .addFormDataPart("name", file.name)
+            .addFormDataPart("size", file.readBytes().size.toString())
+            .addFormDataPart("lastModifiedDate", "SUN")
+            .addFormDataPart("puid", uid)
+            .addFormDataPart(
+                "file", file.name,
+                RequestBody.create("form-data".toMediaTypeOrNull(), file)
+            )
+            .build()
+        val request = Request.Builder()
+            .url(url)
+            .addHeader(
+                "cookie",
+                cookies
+            )
+            .addHeader("Host", "mooc-upload-ans.chaoxing.com")
+            .addHeader(
+                "User-Agent",
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36 Edg/117.0.2045.60"
+            )
+            .post(body).build()
+        val call = client.newCall(request)
+        val response = BaseResponse<Response>()
+        response.dataState = DataState.STATE_INITIALIZE
+        response.data = call.execute()
+        return response
+    }
+
+    fun postForLogin(bodyString: String, url: String):BaseResponse<Response> {
+        val mediaType = "application/x-www-form-urlencoded; charset=utf-8".toMediaTypeOrNull()
+        val requestBody = RequestBody.create(mediaType, bodyString)
+        val request: Request = Request.Builder()
+            .url(url)
+            .post(requestBody)
+            .build()
+        val call = client.newCall(request)
+        val response = BaseResponse<Response>()
+        response.dataState = DataState.STATE_INITIALIZE
+        response.data = call.execute()
+        return response
+    }
+
+    fun requestAsync(clientRequest: Request, onSuccess: (Response) -> Unit = {}, onFailure: (String) -> Unit = {}) {
+        val call = client.newCall(clientRequest)
+        call.enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                onFailure(e.message.toString())
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                onSuccess(response)
+            }
+        })
+    }
+
+    /**
+     * 生成deviceCode (AES-CBC加密随机数据, 模拟设备指纹)
+     */
+    fun generateDeviceCode(): String {
+        return try {
+            val plaintext = ByteArray(16).also { Random.nextBytes(it) }.joinToString("") { "%02x".format(it) }
+            val keyBytes = ByteArray(32).also { Random.nextBytes(it) }
+            val key = keyBytes.copyOf(32)
+            val iv = ByteArray(16).also { Random.nextBytes(it) }
+            val cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
+            cipher.init(Cipher.ENCRYPT_MODE, SecretKeySpec(key, "AES"), IvParameterSpec(iv))
+            val encrypted = cipher.doFinal(plaintext.toByteArray(Charsets.UTF_8))
+            Base64.encodeToString(encrypted, Base64.NO_WRAP)
+        } catch (e: Exception) {
+            Base64.encodeToString(ByteArray(32).also { Random.nextBytes(it) }, Base64.NO_WRAP)
+        }
+    }
+
+    /**
+     * POST方式签到 (参考xxt_python项目, 包含validate/deviceCode等完整参数)
+     */
+    fun postSign(
+        aid: String,
+        uid: String,
+        fid: String = "",
+        name: String = "",
+        signCode: String? = null,
+        enc: String? = null,
+        latitude: String? = null,
+        longitude: String? = null,
+        address: String? = null,
+        objectId: String? = null,
+        validate: String? = null
+    ): BaseResponse<Response> {
+        val cookies = CacheUtils.getCookies(uid)
+        val formBuilder = okhttp3.FormBody.Builder()
+            .add("activeId", aid)
+            .add("uid", uid)
+            .add("fid", fid)
+            .add("name", name)
+            .add("ifTiJiao", "1")
+            .add("vpProbability", "-1")
+            .add("vpStrategy", "")
+            .add("deviceCode", generateDeviceCode())
+
+        signCode?.let { formBuilder.add("signCode", it) }
+        enc?.let { formBuilder.add("enc", it) }
+        latitude?.let { formBuilder.add("latitude", it) }
+        longitude?.let { formBuilder.add("longitude", it) }
+        address?.let { formBuilder.add("address", it) }
+        objectId?.let { formBuilder.add("objectId", it) }
+        validate?.let { formBuilder.add("validate", it) }
+
+        val request = Request.Builder()
+            .url(com.cofbro.qian.data.URL.SIGN_POST_URL)
+            .addHeader("Accept-Language", "zh-Hans-CN;q=1, zh-Hant-CN;q=0.9")
+            .addHeader("cookie", cookies)
+            .addHeader(
+                "User-Agent",
+                "Mozilla/5.0 (iPhone; CPU iPhone OS 14_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 com.ssreader.ChaoXingStudy/ChaoXingStudy_3_4.8_ios_phone_202012052220_56 (@Kalimdor)_12787186548451577248"
+            )
+            .post(formBuilder.build())
+            .build()
+
+        val call = client.newCall(request)
+        val response = BaseResponse<Response>()
+        response.dataState = DataState.STATE_INITIALIZE
+        response.data = call.execute()
+        return response
+    }
+
+    /**
+     * 提交拍照验证(validate_) - 纯提交照片证据, 不重签
+     * 用于QR码流程: pre-release消耗enc后, 单独提交validate+objectId
+     */
+    fun submitPhotoValidate(
+        aid: String, uid: String,
+        validate: String, objectId: String
+    ): BaseResponse<Response> {
+        val cookies = CacheUtils.getCookies(uid)
+        val formBuilder = okhttp3.FormBody.Builder()
+            .add("activeId", aid)
+            .add("uid", uid)
+            .add("validate", validate)
+            .add("objectId", objectId)
+            .add("ifTiJiao", "1")
+            .add("fid", CacheUtils.cache["fid"] ?: "")
+            .add("name", CacheUtils.cache["username"] ?: "")
+
+        val request = Request.Builder()
+            .url(com.cofbro.qian.data.URL.SIGN_POST_URL)
+            .addHeader("Accept-Language", "zh-Hans-CN;q=1, zh-Hant-CN;q=0.9")
+            .addHeader("cookie", cookies)
+            .addHeader(
+                "User-Agent",
+                "Mozilla/5.0 (iPhone; CPU iPhone OS 14_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 com.ssreader.ChaoXingStudy/ChaoXingStudy_3_4.8_ios_phone_202012052220_56 (@Kalimdor)_12787186548451577248"
+            )
+            .post(formBuilder.build())
+            .build()
+
+        val call = client.newCall(request)
+        val response = BaseResponse<Response>()
+        response.dataState = DataState.STATE_INITIALIZE
+        response.data = call.execute()
+        return response
+    }
+
+    /**
+     * 获取验证码图片(用于validate_验证码签到场景)
+     */
+    fun getCaptchaImage(aid: String, validate: String): BaseResponse<Response> {
+        val cookies = CacheUtils.getCurrentCookies()
+        val url = "https://mobilelearn.chaoxing.com/pptSign/getValidateCode?activeId=$aid&validate=$validate"
+        val request = Request.Builder()
+            .url(url)
+            .addHeader("cookie", cookies)
+            .addHeader("User-Agent",
+                "Mozilla/5.0 (iPhone; CPU iPhone OS 14_2_1 like Mac OS X) AppleWebKit/605.1.15")
+            .build()
+        val call = client.newCall(request)
+        val response = BaseResponse<Response>()
+        response.dataState = DataState.STATE_INITIALIZE
+        response.data = call.execute()
+        return response
+    }
+
+    /**
+     * 提交验证码(validate_验证码场景)
+     */
+    fun submitCaptcha(
+        aid: String, uid: String,
+        validate: String, captchaCode: String
+    ): BaseResponse<Response> {
+        val cookies = CacheUtils.getCookies(uid)
+        val formBuilder = okhttp3.FormBody.Builder()
+            .add("activeId", aid)
+            .add("uid", uid)
+            .add("validate", validate)
+            .add("captchaCode", captchaCode)
+            .add("ifTiJiao", "1")
+            .add("fid", CacheUtils.cache["fid"] ?: "")
+            .add("name", CacheUtils.cache["username"] ?: "")
+
+        val request = Request.Builder()
+            .url(com.cofbro.qian.data.URL.SIGN_POST_URL)
+            .addHeader("Accept-Language", "zh-Hans-CN;q=1, zh-Hant-CN;q=0.9")
+            .addHeader("cookie", cookies)
+            .addHeader("User-Agent",
+                "Mozilla/5.0 (iPhone; CPU iPhone OS 14_2_1 like Mac OS X) AppleWebKit/605.1.15")
+            .post(formBuilder.build())
+            .build()
+
+        val call = client.newCall(request)
+        val response = BaseResponse<Response>()
+        response.dataState = DataState.STATE_INITIALIZE
+        response.data = call.execute()
+        return response
+    }
+
+    /**
+     * 预先上传照片获取objectId (在签到前上传, 避免enc被消耗后无法提交validate)
+     */
+    fun preUploadPhoto(): Pair<Boolean, String> {
+        return try {
+            val context = appContext ?: return Pair(false, "")
+            val photoDir = java.io.File(context.getExternalFilesDir(null), "preset_photo")
+            val photoFile = if (photoDir.exists() && photoDir.isDirectory) {
+                photoDir.listFiles()?.firstOrNull { it.extension.lowercase() in listOf("jpg", "jpeg", "png") }
+            } else null
+            if (photoFile == null || !photoFile.exists()) return Pair(false, "")
+
+            // 获取token
+            val tokenResp = request(buildClientRequest(com.cofbro.qian.data.URL.getUploadToken()))
+            val tokenBody = tokenResp.data?.body?.string() ?: ""
+            val tokenData = tokenBody.safeParseToJson()
+            val token = tokenData?.getStringExt("_token") ?: tokenData?.getStringExt("token") ?: ""
+            if (token.isEmpty()) return Pair(false, "")
+
+            // 上传照片
+            val uploadResp = post(com.cofbro.qian.data.URL.getUploadImagePath(token), photoFile)
+            val uploadBody = uploadResp.data?.body?.string() ?: ""
+            val uploadData = uploadBody.safeParseToJson()
+            val objectId = uploadData?.getStringExt("objectId") ?: ""
+            if (objectId.isEmpty()) return Pair(false, "")
+
+            Pair(true, objectId)
+        } catch (e: Exception) {
+            Pair(false, "")
+        }
+    }
+
+    /**
+     * GET方式签到(用于二维码签到等)
+     */
+    fun getSign(
+        aid: String,
+        uid: String,
+        fid: String = "",
+        name: String = "",
+        enc: String? = null,
+        latitude: String = "-1",
+        longitude: String = "-1",
+        address: String? = null,
+        objectId: String? = null
+    ): BaseResponse<Response> {
+        val cookies = CacheUtils.getCookies(uid)
+        val sb = StringBuilder("${com.cofbro.qian.data.URL.SIGN_POST_URL}?")
+        sb.append("&clientip=&appType=15&ifTiJiao=1&vpProbability=-1&vpStrategy=")
+        enc?.let { sb.append("&enc=$it") }
+        if (!name.isNullOrEmpty()) sb.append("&name=${java.net.URLEncoder.encode(name, "UTF-8")}")
+        sb.append("&activeId=$aid&uid=$uid&latitude=$latitude&longitude=$longitude&fid=$fid")
+        sb.append("&deviceCode=${generateDeviceCode()}")
+        address?.let { if (it.isNotEmpty()) sb.append("&address=${java.net.URLEncoder.encode(it, "UTF-8")}") }
+        objectId?.let { sb.append("&objectId=$it") }
+
+        val request = Request.Builder()
+            .url(sb.toString())
+            .addHeader("Accept-Language", "zh-Hans-CN;q=1, zh-Hant-CN;q=0.9")
+            .addHeader("cookie", cookies)
+            .addHeader(
+                "User-Agent",
+                "Mozilla/5.0 (iPhone; CPU iPhone OS 14_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 com.ssreader.ChaoXingStudy/ChaoXingStudy_3_4.8_ios_phone_202012052220_56 (@Kalimdor)_12787186548451577248"
+            )
+            .get()
+            .build()
+
+        val call = client.newCall(request)
+        val response = BaseResponse<Response>()
+        response.dataState = DataState.STATE_INITIALIZE
+        response.data = call.execute()
+        return response
+    }
+
+}

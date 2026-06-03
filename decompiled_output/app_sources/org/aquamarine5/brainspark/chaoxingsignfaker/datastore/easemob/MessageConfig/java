@@ -1,0 +1,27 @@
+// Decompilation failed: 'ClassAnalysis' object has no attribute 'get_name'
+// Class: Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageConfig;
+// Method: <clinit> ()V
+// Method: <init> ()V
+// Method: clearField1 ()V
+// Method: f (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageConfig;)V
+// Method: g (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageConfig; Z)V
+// Method: getDefaultInstance ()Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageConfig;
+// Method: h ()Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageConfig;
+// Method: newBuilder ()Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageConfig$Builder;
+// Method: newBuilder (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageConfig;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageConfig$Builder;
+// Method: parseDelimitedFrom (Ljava/io/InputStream;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageConfig;
+// Method: parseDelimitedFrom (Ljava/io/InputStream; Lb81;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageConfig;
+// Method: parseFrom (Ldu;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageConfig;
+// Method: parseFrom (Ldu; Lb81;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageConfig;
+// Method: parseFrom (Ljava/io/InputStream;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageConfig;
+// Method: parseFrom (Ljava/io/InputStream; Lb81;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageConfig;
+// Method: parseFrom (Ljava/nio/ByteBuffer;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageConfig;
+// Method: parseFrom (Ljava/nio/ByteBuffer; Lb81;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageConfig;
+// Method: parseFrom (Lye0;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageConfig;
+// Method: parseFrom (Lye0; Lb81;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageConfig;
+// Method: parseFrom ([B)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageConfig;
+// Method: parseFrom ([B Lb81;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageConfig;
+// Method: parser ()Lua3;
+// Method: setField1 (Z)V
+// Method: dynamicMethod (Lok1; Ljava/lang/Object; Ljava/lang/Object;)Ljava/lang/Object;
+// Method: getField1 ()Z

@@ -1,0 +1,12 @@
+// Decompilation failed: 'ClassAnalysis' object has no attribute 'get_name'
+// Class: Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/JIDOrBuilder;
+// Method: getDefaultInstanceForType ()Ljl2;
+// Method: getField2 ()Ljava/lang/String;
+// Method: getField2Bytes ()Ldu;
+// Method: getField3 ()Ljava/lang/String;
+// Method: getField3Bytes ()Ldu;
+// Method: getField4 ()Ljava/lang/String;
+// Method: getField4Bytes ()Ldu;
+// Method: getName ()Ljava/lang/String;
+// Method: getNameBytes ()Ldu;
+// Method: isInitialized ()Z

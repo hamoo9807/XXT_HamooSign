@@ -1,0 +1,5 @@
+// Decompilation failed: 'ClassAnalysis' object has no attribute 'get_name'
+// Class: Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/NameSpace$1;
+// Method: <init> ()V
+// Method: findValueByNumber (I)Lmz1;
+// Method: findValueByNumber (I)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/NameSpace;

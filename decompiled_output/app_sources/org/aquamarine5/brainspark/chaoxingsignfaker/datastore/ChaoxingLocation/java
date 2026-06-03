@@ -1,0 +1,48 @@
+// Decompilation failed: 'ClassAnalysis' object has no attribute 'get_name'
+// Class: Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingLocation;
+// Method: <clinit> ()V
+// Method: <init> ()V
+// Method: clearAddress ()V
+// Method: clearLabel ()V
+// Method: clearLatitude ()V
+// Method: clearLongitude ()V
+// Method: f (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingLocation;)V
+// Method: g (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingLocation;)V
+// Method: getDefaultInstance ()Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingLocation;
+// Method: h (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingLocation;)V
+// Method: i (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingLocation;)V
+// Method: j (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingLocation; Ljava/lang/String;)V
+// Method: k (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingLocation; Ldu;)V
+// Method: l (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingLocation; Ljava/lang/String;)V
+// Method: m (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingLocation; Ldu;)V
+// Method: n (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingLocation; D)V
+// Method: newBuilder ()Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingLocation$Builder;
+// Method: newBuilder (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingLocation;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingLocation$Builder;
+// Method: o (Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingLocation; D)V
+// Method: p ()Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingLocation;
+// Method: parseDelimitedFrom (Ljava/io/InputStream;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingLocation;
+// Method: parseDelimitedFrom (Ljava/io/InputStream; Lb81;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingLocation;
+// Method: parseFrom (Ldu;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingLocation;
+// Method: parseFrom (Ldu; Lb81;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingLocation;
+// Method: parseFrom (Ljava/io/InputStream;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingLocation;
+// Method: parseFrom (Ljava/io/InputStream; Lb81;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingLocation;
+// Method: parseFrom (Ljava/nio/ByteBuffer;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingLocation;
+// Method: parseFrom (Ljava/nio/ByteBuffer; Lb81;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingLocation;
+// Method: parseFrom (Lye0;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingLocation;
+// Method: parseFrom (Lye0; Lb81;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingLocation;
+// Method: parseFrom ([B)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingLocation;
+// Method: parseFrom ([B Lb81;)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingLocation;
+// Method: parser ()Lua3;
+// Method: setAddress (Ljava/lang/String;)V
+// Method: setAddressBytes (Ldu;)V
+// Method: setLabel (Ljava/lang/String;)V
+// Method: setLabelBytes (Ldu;)V
+// Method: setLatitude (D)V
+// Method: setLongitude (D)V
+// Method: dynamicMethod (Lok1; Ljava/lang/Object; Ljava/lang/Object;)Ljava/lang/Object;
+// Method: getAddress ()Ljava/lang/String;
+// Method: getAddressBytes ()Ldu;
+// Method: getLabel ()Ljava/lang/String;
+// Method: getLabelBytes ()Ldu;
+// Method: getLatitude ()D
+// Method: getLongitude ()D
