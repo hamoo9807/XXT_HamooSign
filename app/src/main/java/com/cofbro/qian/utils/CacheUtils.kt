@@ -56,13 +56,22 @@ object CacheUtils {
         val prefs = sp ?: return
         // Restore per-UID cookies (keys like "cookies_191970813")
         val allEntries = prefs.all
+        var restoredUidCookies: String? = null
+        val storedUid = prefs.getString(KEY_UID, null) ?: ""
         for ((key, value) in allEntries) {
             if (key is String && key.startsWith("${KEY_COOKIES}_") && value is String && value.isNotEmpty()) {
                 cache[key] = value
+                // ★ 同时同步到全局 cookies key (修复: 之前只存了per-UID, getCurrentCookies()返回空)
+                val uidInKey = key.removePrefix("${KEY_COOKIES}_")
+                if (uidInKey == storedUid) {
+                    restoredUidCookies = value
+                }
             }
         }
-        // Fallback: restore global cookies (from older app versions)
-        if (cache[Constants.Login.COOKIES].isNullOrEmpty()) {
+        // ★ 恢复全局 cookies (优先匹配当前UID的, 其次旧版兼容)
+        if (!restoredUidCookies.isNullOrEmpty()) {
+            cache[Constants.Login.COOKIES] = restoredUidCookies
+        } else if (cache[Constants.Login.COOKIES].isNullOrEmpty()) {
             prefs.getString(KEY_COOKIES, null)?.let {
                 if (it.isNotEmpty()) cache[Constants.Login.COOKIES] = it
             }

@@ -6,14 +6,32 @@
     android:padding="16dp"
     android:background="@android:color/white">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="安全验证"
-        android:textSize="16sp"
-        android:textColor="#333333"
-        android:textStyle="bold"
-        android:layout_marginBottom="12dp" />
+        android:layout_marginBottom="12dp">
+
+        <TextView
+            android:id="@+id/tv_captcha_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="安全验证"
+            android:textSize="16sp"
+            android:textColor="#333333"
+            android:textStyle="bold"
+            android:layout_centerVertical="true" />
+
+        <ImageView
+            android:id="@+id/iv_captcha_close"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/close"
+            android:contentDescription="关闭"
+            android:padding="2dp"
+            android:background="?attr/selectableItemBackgroundBorderless" />
+    </RelativeLayout>
 
     <!-- 验证码图片区域 (CSF对齐: 2:1 aspect ratio → 320dp:160dp) -->
     <FrameLayout

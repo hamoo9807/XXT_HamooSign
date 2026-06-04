@@ -171,8 +171,8 @@ class ProxySignManager(
                 val result = signForUser(user)
                 results.add(result)
 
-                // CSF对齐: 已签到=成功, 不算失败
-                val isEffectiveSuccess = result.isSuccess() || result.isAlreadySigned
+                // CSF对齐: 已签到/非本班=跳过不计失败, 仅真正成功算成功
+                val isEffectiveSuccess = result.isSuccess() || result.isAlreadySigned || result.isNotInClass
                 if (isEffectiveSuccess) {
                     user.state.isSuccess = true
                     successCount++

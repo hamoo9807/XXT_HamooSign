@@ -67,7 +67,7 @@
         <activity android:name=".profile.update.UpdateDetailActivity"/>
         <activity android:name=".wrapper.did.DoHomeworkActivity" />
         <activity android:name=".scan.ScanActivity" />
-        <activity android:name=".account.manager.AccountManagerActivity" />
+        <activity android:name=".account.manager.AccountManagerActivity" android:windowSoftInputMode="adjustResize" />
         <activity android:name=".wrapper.WrapperActivity" />
         <activity android:name=".profile.ProfileFragment" />
         <activity android:name=".mapsetting.InputTipsActivity" />

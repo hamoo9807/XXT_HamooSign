@@ -12,6 +12,7 @@ import com.cofbro.qian.databinding.ActivitySmsBinding
 import com.cofbro.qian.main.MainActivity
 import com.cofbro.qian.utils.CacheUtils
 import com.cofbro.qian.utils.Constants
+import com.cofbro.qian.utils.CookieRefresher
 import com.cofbro.qian.utils.PhoneLoginUtil
 import com.cofbro.qian.utils.dp2px
 import com.cofbro.qian.utils.getStatusBarHeight
@@ -84,6 +85,10 @@ class SMSActivity : BaseActivity<SMSViewModel, ActivitySmsBinding>() {
                         uid ?: "",
                         fid ?: ""
                     )
+                    // ★ 保存手机号作为username (SMS登录缺少此步骤, 导致退出后无法自动恢复)
+                    CacheUtils.persistCookie(Constants.USER.USERNAME, phoneNumber)
+                    // ★ 记录登录时间 (密码登录有但SMS登录漏了)
+                    CookieRefresher.recordLoginTime()
                     lifecycleScope.launch(Dispatchers.Main) {
                        toMainActivity()
                     }

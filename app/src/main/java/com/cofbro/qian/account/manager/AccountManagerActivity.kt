@@ -14,11 +14,12 @@ import com.alibaba.fastjson.JSONObject
 import com.cofbro.hymvvmutils.base.BaseActivity
 import com.cofbro.qian.R
 import com.cofbro.qian.account.adapter.AccountsAdapter
-import com.cofbro.qian.data.URL
 import com.cofbro.qian.databinding.ActivityAccountmanagerBinding
 import com.cofbro.qian.utils.AccountManager
 import com.cofbro.qian.utils.CacheUtils
 import com.cofbro.qian.utils.Constants
+import com.cofbro.qian.utils.NetworkUtils
+import com.cofbro.qian.utils.safeParseToJson
 import com.cofbro.qian.utils.dp2px
 import com.cofbro.qian.utils.getIntExt
 import com.cofbro.qian.utils.getJSONArrayExt
@@ -37,7 +38,6 @@ import kotlinx.coroutines.withContext
 
 class AccountManagerActivity :
     BaseActivity<AccountManagerViewModel, ActivityAccountmanagerBinding>() {
-    private var behavior: BottomSheetBehavior<NestedScrollView>? = null
     private var loadingView: FullScreenDialog? = null
     private var mAdapter: AccountsAdapter? = null
     private var data: JSONObject? = null
@@ -54,12 +54,6 @@ class AccountManagerActivity :
 
     private fun initView() {
         initToolbar()
-        binding?.csContent?.apply {
-            val height = resources.displayMetrics.heightPixels
-            val layout = layoutParams
-            layout.height = height
-            layoutParams = layout
-        }
 
         mAdapter = AccountsAdapter().apply {
             setItemOnLongClickListener { view, itemData, pos ->
@@ -146,7 +140,103 @@ class AccountManagerActivity :
     }
 
     private fun initObserver() {}
-    private fun initEvent() {}
+    private fun initEvent() {
+        // ★ 绑定账号按钮
+        binding?.tvBinding?.setOnClickListener {
+            val username = binding?.etUsername?.text?.toString()?.trim() ?: ""
+            val password = binding?.etPassword?.text?.toString()?.trim() ?: ""
+            if (username.isEmpty() || password.isEmpty()) {
+                ToastUtils.show("请输入账号和密码")
+                return@setOnClickListener
+            }
+            binding?.tvBinding?.isEnabled = false
+            binding?.tvBinding?.text = "绑定中..."
+            lifecycleScope.launch(Dispatchers.IO) {
+                try {
+                    bindAccountWithCredentials(username, password)
+                } catch (e: Exception) {
+                    withContext(Dispatchers.Main) {
+                        ToastUtils.show("绑定失败: ${e.message}")
+                        resetBindButton()
+                    }
+                }
+            }
+        }
+    }
+
+    private suspend fun bindAccountWithCredentials(username: String, password: String) {
+        val resp = NetworkUtils.request(
+            NetworkUtils.buildServerRequest(com.cofbro.qian.data.URL.getLoginPath(username, password))
+        )
+        val body = resp.data?.body?.string()?.safeParseToJson()
+            ?: throw Exception("登录响应为空")
+        if (body.getBoolean("status") != true) {
+            throw Exception("账号或密码错误")
+        }
+        val headers = resp.data?.headers ?: throw Exception("响应头获取失败")
+        val list = headers.values("Set-Cookie")
+        if (list.isEmpty()) throw Exception("Cookie获取失败")
+        val cookies = StringBuilder()
+        var uid = ""
+        var fid = ""
+        for (header in list) {
+            val temp = header.split(";".toRegex()).firstOrNull() ?: continue
+            cookies.append(temp).append(";")
+            if (temp.startsWith("UID")) uid = temp.substring(4)
+            if (temp.startsWith("fid")) fid = temp.substring(4)
+        }
+        if (cookies.isEmpty()) throw Exception("Cookie解析失败")
+        val cookieStr = cookies.toString()
+        val account = AccountManager.buildAccount(username, password, uid, fid, cookieStr)
+        // ★ 获取真实姓名作为备注 (避免列表显示手机号)
+        try {
+            val realName = fetchRealName(cookieStr)
+            if (!realName.isNullOrEmpty()) {
+                account[Constants.Account.REMARK] = realName
+            }
+        } catch (_: Exception) {}
+        val accountData = AccountManager.loadAllAccountData(this@AccountManagerActivity)
+        val updated = AccountManager.bindAccounts(this@AccountManagerActivity, accountData, account)
+        if (updated == null) throw Exception("绑定失败(账号已存在?)")
+        withContext(Dispatchers.Main) {
+            ToastUtils.show("绑定成功!")
+            // 刷新列表
+            data = updated
+            notifyAdapterDataChanged(data)
+            // 清空输入
+            binding?.etUsername?.text?.clear()
+            binding?.etPassword?.text?.clear()
+            resetBindButton()
+        }
+    }
+
+    private fun resetBindButton() {
+        binding?.tvBinding?.isEnabled = true
+        binding?.tvBinding?.text = "绑定账号"
+    }
+
+    /** 用Cookie简单GET获取学习通真实姓名 (不依赖DeviceInfoHelper, 避免返回HTML) */
+    private suspend fun fetchRealName(cookies: String): String? = withContext(Dispatchers.IO) {
+        try {
+            val client = okhttp3.OkHttpClient.Builder()
+                .connectTimeout(5, java.util.concurrent.TimeUnit.SECONDS)
+                .readTimeout(5, java.util.concurrent.TimeUnit.SECONDS)
+                .build()
+            // GET方式, 仅带Cookie, 返回 {"msg":"姓名",...}
+            val req = okhttp3.Request.Builder()
+                .url("https://sso.chaoxing.com/apis/login/userLogin4Uname.do")
+                .addHeader("cookie", cookies)
+                .addHeader("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 14_2_1 like Mac OS X)")
+                .get()
+                .build()
+            val body = client.newCall(req).execute().use { it.body?.string() ?: "" }
+            // 解析: 反序列化JSON提取msg字段
+            val cleaned = body.trim().replace("﻿", "")
+            if (!cleaned.startsWith("{")) return@withContext null  // 不是JSON, 跳过
+            val json = com.alibaba.fastjson.JSONObject.parseObject(cleaned)
+            json.getString("msg")?.takeIf { it.isNotEmpty() && it != "null" && it.length < 30 }
+        } catch (_: Exception) { null }
+    }
 
     private fun initToolbar() {
         toolbarHeight = getStatusBarHeight(this).toInt()

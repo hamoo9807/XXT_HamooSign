@@ -53,7 +53,9 @@ object CookieRefresher {
         try {
             val ctx = context.applicationContext
             val username = ctx.getBySp("username") ?: return false
-            val password = ctx.getBySp("password") ?: return false
+            // ★ AES解密 (兼容旧版明文密码)
+            val rawPassword = ctx.getBySp("password") ?: return false
+            val password = AccountManager.decryptPassword(rawPassword)
             if (username.isEmpty() || password.isEmpty()) return false
 
             val request = NetworkUtils.buildServerRequest(URL.getLoginPath(username, password))

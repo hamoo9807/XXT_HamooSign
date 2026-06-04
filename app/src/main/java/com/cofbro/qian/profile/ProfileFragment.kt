@@ -489,19 +489,38 @@ class ProfileFragment : BaseFragment<ProfileViewModel, FragmentProfileBinding>()
             return
         }
         lifecycleScope.launch(Dispatchers.IO) {
-            // CSF对齐: 获取真实姓名
             try { fetchRealNameCSF(cookies)?.let { CacheUtils.setRealName(it) } } catch (_: Exception) {}
-            val json = CacheUtils.getExportCookieJson()
+            val fullJson = CacheUtils.getExportCookieJson()       // 含加密密码
+            val noPwdJson = buildExportJsonWithoutPassword(fullJson) // 不含密码
             withContext(Dispatchers.Main) {
-                val clipboard = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                clipboard.setPrimaryClip(ClipData.newPlainText("cookie", json))
                 AlertDialog.Builder(requireContext())
-                    .setTitle("Cookie已导出")
-                    .setMessage("Cookie已复制到剪贴板，可发送给他人导入实现代签。")
-                    .setPositiveButton("确定", null)
+                    .setTitle("导出Cookie")
+                    .setMessage("请选择导出方式:\n\n• 完整导出: 含加密密码, 可自动续期\n• 无密码导出: 仅Cookie, 约5天后失效需重新导出")
+                    .setPositiveButton("完整导出(推荐)") { _, _ ->
+                        copyToClipboard(fullJson, "Cookie(含密码)已复制到剪贴板")
+                    }
+                    .setNegativeButton("无密码导出") { _, _ ->
+                        copyToClipboard(noPwdJson, "Cookie(无密码)已复制到剪贴板, 约5天后失效")
+                    }
+                    .setNeutralButton("取消", null)
                     .show()
             }
         }
+    }
+
+    private fun buildExportJsonWithoutPassword(fullJson: String): String {
+        return try {
+            val json = com.alibaba.fastjson.JSONObject.parseObject(fullJson)
+            json.remove("password")
+            json.remove("phone")
+            json.toJSONString()
+        } catch (_: Exception) { fullJson }
+    }
+
+    private fun copyToClipboard(text: String, toastMsg: String) {
+        val clipboard = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
+        clipboard.setPrimaryClip(android.content.ClipData.newPlainText("cookie", text))
+        Toast.makeText(requireContext(), toastMsg, Toast.LENGTH_LONG).show()
     }
 
     private fun importCookie() {
