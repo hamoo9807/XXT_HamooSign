@@ -1,32 +1,150 @@
-# XXT_HamooSign
+# Doraemon — 学习通智能签到助手
 
-学习通智能签到助手。
+基于 [CofbroTeam/Doraemon](https://github.com/CofbroTeam/Doraemon) 二次开发，参考 [aquamarine5/ChaoxingSignFaker](https://github.com/aquamarine5/ChaoxingSignFaker) 架构。
 
-基于 [CofbroTeam/Doraemon](https://github.com/CofbroTeam/Doraemon) 二次开发，参考 [aquamarine5/ChaoxingSignFaker](https://github.com/aquamarine5/ChaoxingSignFaker) 架构重构。
+---
 
-## 核心功能
+## 使用攻略
 
-- **全类型签到**: 普通、二维码、手势、定位、签到码、拍照签到
-- **滑块验证码**: 自动获取并弹窗验证 (对接 captcha.chaoxing.com)
-- **人脸识别绕过**: 预设照片自动上传绕过 checkFace
-- **多账号代签**: 独立 HTTP 客户端 + Cookie 隔离 + 过期自动重登
-- **CheckBox 选择代签对象**: 在绑定账号中勾选/取消参与代签的账号
-- **IM 群聊监听**: 自动检测群聊中的签到消息并代签
-- **位置签到**: GPS 定位 + 预设地址 + WGS84/BD09 坐标转换
-- **暴力破解**: 手势码和签到码自动枚举
+### 1. 登录
+
+打开 App 后进入登录页，支持两种方式：
+
+- **账号密码登录**: 输入学习通手机号 + 密码。密码经 AES 加密后本地存储，不会明文泄露。
+- **手机验证码登录**: 输入手机号 → 获取验证码 → 支持粘贴 6 位验证码自动填表。
+
+登录成功后 Cookie 自动保存，下次启动自动登录。
+
+---
+
+### 2. 绑定代签账号
+
+> 个人中心 → 关联账号
+
+输入待代签的学习通手机号 + 密码，点击绑定。App 会自动：
+- 登录获取 Cookie
+- 拉取真实姓名（而不是显示手机号）
+- 密码 AES 加密存储
+
+绑定后可在列表中长按删除，或通过 CheckBox 开关控制是否参与代签。
+
+---
+
+### 3. Cookie 导出 / 导入
+
+> 个人中心 → 导出Cookie
+
+点击导出时弹窗选择：
+
+| 方式 | 内容 | 特点 |
+|---|---|---|
+| **完整导出** | Cookie + 加密密码 | 可自动续期，推荐 |
+| **无密码导出** | 仅 Cookie | 约 5 天后失效，需重新导出 |
+
+> 个人中心 → 导入Cookie
+
+粘贴他人发来的 Cookie JSON，可填写手机号+密码支持自动重登。
+
+---
+
+### 4. 高德地图 Key（定位签到必备）
+
+部分签到需要精确 GPS 定位。如果定位偏差大或失败：
+
+1. 前往 [lbs.amap.com](https://lbs.amap.com) 注册并创建应用
+2. 获取 **Web服务** API Key
+3. 在 App 中：**个人中心 → 高德Key** 粘贴保存
+
+⚠️ 不配置高德 Key 时，定位签到可能失败。
+
+---
+
+### 5. 预设地址
+
+> 个人中心 → 预留地址
+
+设置常用签到位置。签到时会优先尝试 GPS 定位，失败后自动遍历预设地址重试。
+
+---
+
+### 6. 代签设置
+
+> 个人中心 → 代签所有绑定账号（开关）
+
+开启后，主号签到成功会自动为所有已绑定的代签账号签到。代签过程：
+- 独立 HTTP 客户端 + Cookie 隔离
+- 已签到 / 非本班 → 静默跳过，不计失败
+- Cookie 过期 → 自动用加密密码重新登录续期
+
+---
+
+### 7. IM 群聊监听
+
+> 个人中心 → IM监听（开关）
+
+后台监听学习通群聊中的签到通知，自动签到。
+
+---
+
+### 8. 预设照片（拍照/人脸签到）
+
+> 个人中心 → 预设照片 → 从相册选择
+
+用于拍照验证和人脸识别签到的自动绕过。
+
+---
+
+### 9. 查签到
+
+首页 → 查签到 → 自动扫描所有课程进行中的签到活动 → 点击签到。
+
+---
+
+### 10. 手动签到（Debug）
+
+首页 LOG → 手动签到。自动签到失败时可手动填写参数补签。
+
+---
+
+## 签到类型支持
+
+| 类型 | 说明 |
+|---|---|
+| 普通签到 | 直接提交 |
+| 二维码签到 | 扫码后自动解析 enc 提交 |
+| 手势签到 | 4~6 位不重复数字排列暴力枚举 |
+| 签到码 | 4~6 位数字组合暴力枚举 |
+| 定位签到 | GPS + 预设地址 + WGS84/BD09 坐标转换 |
+| 拍照签到 | 预上传照片自动提交 |
+| 人脸识别 | 预设照片自动上传绕过 checkFace |
+
+---
+
+## 滑块验证码
+
+自动弹窗滑动验证，支持：
+- 图片自适应加载（URL / base64）
+- 关闭按钮 + 返回键退出，不卡死
+- 详细 debug 日志
+
+---
 
 ## 项目结构
 
 ```
 app/src/main/java/com/cofbro/qian/
-  signer/      签到引擎 (BaseSigner, QRCodeSigner, LocationSigner, ...)
+  signer/      签到引擎 (BaseSigner, QRCodeSigner, LocationSigner, ProxySignManager)
   im/          IM 监听与自动代签 (IMMonitorService, AutoSignHandler)
-  home/        首页与聊天 (HomeFragment, GroupHomeFragment)
+  home/        首页与课程 (HomeFragment)
   profile/     配置与账号管理 (ProfileFragment)
   account/     绑定账号 (AccountManagerActivity, AccountsAdapter)
-  utils/       工具类 (NetworkUtils, CaptchaHelper, FaceUploadHelper, ...)
+  login/       登录 (LoginActivity, SMSActivity)
+  utils/       工具类 (NetworkUtils, CaptchaHelper, CacheUtils, CookieRefresher, ...)
+  view/        自定义View (VerifyCodeView, SliderCaptchaDialog, ...)
   data/        API URL 定义
 ```
+
+---
 
 ## 免责声明
 
