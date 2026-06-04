@@ -1,5 +1,0 @@
-// Decompilation failed: 'ClassAnalysis' object has no attribute 'get_name'
-// Class: Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/easemob/MessageConfigOrBuilder;
-// Method: getDefaultInstanceForType ()Ljl2;
-// Method: getField1 ()Z
-// Method: isInitialized ()Z

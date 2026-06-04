@@ -1,7 +1,0 @@
-// Decompilation failed: 'ClassAnalysis' object has no attribute 'get_name'
-// Class: Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingFaceRecognitionConfigureOrBuilder;
-// Method: getDefaultInstanceForType ()Ljl2;
-// Method: getImages (I)Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingFaceRecognitionImage;
-// Method: getImagesCount ()I
-// Method: getImagesList ()Ljava/util/List;
-// Method: isInitialized ()Z

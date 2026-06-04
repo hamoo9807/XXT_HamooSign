@@ -1,9 +1,0 @@
-// Decompilation failed: 'ClassAnalysis' object has no attribute 'get_name'
-// Class: Lorg/aquamarine5/brainspark/chaoxingsignfaker/MainActivity;
-// Method: <init> ()V
-// Method: onCreate (Landroid/os/Bundle;)V
-// Method: onDestroy ()V
-// Method: onNewIntent (Landroid/content/Intent;)V
-// Method: onPause ()V
-// Method: onResume ()V
-// Method: onStop ()V

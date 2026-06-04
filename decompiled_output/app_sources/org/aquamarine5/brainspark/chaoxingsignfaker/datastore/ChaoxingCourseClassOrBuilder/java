@@ -1,6 +1,0 @@
-// Decompilation failed: 'ClassAnalysis' object has no attribute 'get_name'
-// Class: Lorg/aquamarine5/brainspark/chaoxingsignfaker/datastore/ChaoxingCourseClassOrBuilder;
-// Method: getClassId ()I
-// Method: getCourseId ()I
-// Method: getDefaultInstanceForType ()Ljl2;
-// Method: isInitialized ()Z
