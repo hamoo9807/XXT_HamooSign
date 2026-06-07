@@ -197,7 +197,7 @@ class AccountManagerActivity :
         } catch (_: Exception) {}
         val accountData = AccountManager.loadAllAccountData(this@AccountManagerActivity)
         val updated = AccountManager.bindAccounts(this@AccountManagerActivity, accountData, account)
-        if (updated == null) throw Exception("绑定失败(账号已存在?)")
+        if (updated == null) throw Exception("该账号已绑定，无需重复绑定")
         withContext(Dispatchers.Main) {
             ToastUtils.show("绑定成功!")
             // 刷新列表

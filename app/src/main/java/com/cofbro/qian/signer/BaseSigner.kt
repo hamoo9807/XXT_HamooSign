@@ -96,7 +96,6 @@ abstract class BaseSigner(
                 } else {
                     NetworkUtils.request(request)
                 }
-                DebugLogCollector.d(TAG, "extContent POST完成")
             }
             // Step 2: analysis GET
             val analysisUrl = "https://mobilelearn.chaoxing.com/pptSign/analysis?DB_STRATEGY=RANDOM&aid=$aid&vs=1"
@@ -106,7 +105,6 @@ abstract class BaseSigner(
             if (analysis2Code.isNotEmpty()) {
                 NetworkUtils.request(NetworkUtils.buildClientRequest("https://mobilelearn.chaoxing.com/pptSign/analysis2?DB_STRATEGY=RANDOM&code=$analysis2Code"))
             }
-            DebugLogCollector.d(TAG, "预签到完成")
         } catch (e: Exception) {
             DebugLogCollector.w(TAG, "预签到异常: ${e.message}")
         }
@@ -205,8 +203,6 @@ abstract class BaseSigner(
      * 处理validate_拍照验证
      */
     open suspend fun handleValidate(validateToken: String, lat: String = "-1", lon: String = "-1", addr: String = ""): SignResult {
-        DebugLogCollector.d(TAG, "处理validate_拍照验证")
-
         // 优先使用预上传的objectId
         val objectId = preUploadedObjectId ?: run {
             val (success, objId) = NetworkUtils.preUploadPhoto()
@@ -237,14 +233,11 @@ abstract class BaseSigner(
      * 处理checkFace_人脸识别防作弊
      */
     open suspend fun handleCheckFace(faceToken: String, lat: String = "-1", lon: String = "-1", addr: String = ""): SignResult {
-        DebugLogCollector.d(TAG, "处理checkFace_人脸识别")
-
         val clazzId = preCheck?.clazzId ?: ""
         val courseId = preCheck?.courseId ?: ""
 
-        // 方式1(CSF): 用真实faceEnc签到 (最可靠)
+        // 方式1: 用真实faceEnc签到 (最可靠)
         if (preFetchedFaceEnc != null) {
-            DebugLogCollector.d(TAG, "CSF人脸: 用真实faceEnc签到")
             val faceObjectId = CacheUtils.cache["faceObjectId"] ?: ""
             try {
                 val url = "https://mobilelearn.chaoxing.com/pptSign/stuSignajax?&clientip=&appType=15&ifTiJiao=1&vpProbability=-1&vpStrategy=" +
@@ -254,12 +247,11 @@ abstract class BaseSigner(
                         "&deviceCode=${NetworkUtils.generateDeviceCode()}"
                 val resp = NetworkUtils.request(NetworkUtils.buildClientRequest(url))
                 val body = resp.data?.body?.string() ?: ""
-                DebugLogCollector.d(TAG, "CSF人脸签到: $body")
                 val result = SignResult.fromBody(body)
                 if (result.isSuccess()) return result
                 if (result.validateToken != null) return handleValidate(result.validateToken!!, lat, lon, addr)
             } catch (e: Exception) {
-                DebugLogCollector.w(TAG, "CSF人脸异常: ${e.message}")
+                DebugLogCollector.w(TAG, "faceEnc签到异常: ${e.message}")
             }
         }
 
@@ -267,7 +259,6 @@ abstract class BaseSigner(
         try {
             val (success, realObjId) = NetworkUtils.preUploadPhoto()
             if (success && realObjId.isNotEmpty()) {
-                DebugLogCollector.d(TAG, "使用真实照片objectId=$realObjId 尝试updateqrstatus")
                 val url = "https://mooc1-api.chaoxing.com/qr/updateqrstatus?clazzId=$clazzId&courseId=$courseId&uuid=$faceToken&objectId=$realObjId&qrcEnc=&failCount=0&compareResult=0"
                 val resp = NetworkUtils.request(NetworkUtils.buildClientRequest(url))
                 val body = resp.data?.body?.string() ?: ""
@@ -275,7 +266,6 @@ abstract class BaseSigner(
                     return SignResult(true, "人脸绕过成功(真实照片)", body)
 
                 // 也尝试带objectId POST签到
-                DebugLogCollector.d(TAG, "updateqrstatus失败, 尝试带objectId POST")
                 val pResp = NetworkUtils.postSign(aid = aid, uid = uid, fid = fid, name = name,
                     latitude = lat, longitude = lon, address = addr, objectId = realObjId)
                 val pBody = pResp.data?.body?.string() ?: ""

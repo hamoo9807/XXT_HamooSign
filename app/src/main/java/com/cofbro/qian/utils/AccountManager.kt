@@ -90,7 +90,7 @@ object AccountManager {
                 for (i in 0 until array.size) {
                     if (array.getJSONObject(i).getString(Constants.Account.UID) == newUid) {
                         DebugLogCollector.w("AccountManager", "账户已存在, 跳过: uid=$newUid")
-                        return data  // 不重复添加
+                        return null  // 返回null让调用方知道绑定失败(账号已存在)
                     }
                 }
             }

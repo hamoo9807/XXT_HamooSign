@@ -100,17 +100,14 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
             handleQrCodeResultInternal(result)
         } finally {
             isSigningIn = false
-            DebugLogCollector.d(QR_DEBUG, "========== 扫码签到结束 ==========")
         }
     }
 
     private fun handleQrCodeResultInternal(result: String) {
-        DebugLogCollector.d(QR_DEBUG, "========== 扫码签到开始 ==========")
-        DebugLogCollector.d(QR_DEBUG, "扫码原始结果: $result")
         val aid: String
         val qrCodeId: String
         var enc: String? = null
-        var fullIdParams: String? = null  // pre-release方式: id=后面的全部参数(含enc等)
+        var fullIdParams: String? = null
 
         if (result.contains("SIGNIN:aid=")) {
             aid = result.substringAfter("SIGNIN:aid=").substringBefore("&")
@@ -118,15 +115,12 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
             fullIdParams = qrCodeId
             val encMatch = Regex("(?<=&enc=)[\\dA-Z]+").find(result)
             enc = encMatch?.value
-            DebugLogCollector.d(QR_DEBUG, "提取到enc(SIGNIN): $enc")
         } else if (result.contains("id=")) {
-            // pre-release方式: 取id=后面的全部内容作为fullIdParams
             fullIdParams = result.substringAfter("id=")
             qrCodeId = fullIdParams
             aid = qrCodeId.substringBefore("&")
             val encMatch = Regex("(?<=&enc=)[\\dA-Z]+").find(result)
             enc = encMatch?.value
-            DebugLogCollector.d(QR_DEBUG, "提取到enc: $enc")
         } else if (result.matches(Regex("\\d+"))) {
             aid = result
             qrCodeId = result
@@ -136,7 +130,6 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
             ToastUtils.show("无法识别签到二维码")
             return
         }
-        DebugLogCollector.d(QR_DEBUG, "提取到aid: $aid, qrCodeId: $qrCodeId, enc=$enc, fullIdParams=$fullIdParams")
         val currentCookies = CacheUtils.getCurrentCookies()
         if (currentCookies.isEmpty()) {
             DebugLogCollector.e(QR_DEBUG, "内存中无cookie, 请先登录")
@@ -150,7 +143,6 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
                 val signType = preCheck?.otherId ?: ""
                 val fetchedClassId = preCheck?.clazzId ?: ""
                 val fetchedCourseId = preCheck?.courseId ?: ""
-                DebugLogCollector.d(QR_DEBUG, "签到类型: $signType (0=普通 2=二维码 3=手势 4=定位 5=签到码)")
 
                 val uid = CacheUtils.cache["uid"] ?: ""
                 val fid = CacheUtils.cache["fid"] ?: ""
@@ -187,7 +179,6 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
                 val signResult = signer.sign()
 
                 // 处理结果
-                DebugLogCollector.d(QR_DEBUG, "签到结果: success=${signResult.isSuccess()} msg=${signResult.message}")
                 withContext(Dispatchers.Main) {
                     when {
                         signResult.isSuccess() -> ToastUtils.show("签到成功!")
@@ -209,7 +200,6 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
                 }
             } finally {
                 isSigningIn = false
-                DebugLogCollector.d(QR_DEBUG, "========== 扫码签到结束 ==========")
             }
         }
     }
@@ -220,7 +210,6 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
     // handleValidateSign / handleCheckFaceSign / handleSignResponse 保留供防作弊入口使用
 
     private suspend fun doPreSign(aid: String) {
-        DebugLogCollector.d(QR_DEBUG, "--- 预签到: analysis + analysis2 ---")
         val analysisUrl = URL.getAnalysisPath(aid)
         val analysisResp = NetworkUtils.request(NetworkUtils.buildClientRequest(analysisUrl))
         val analysisBody = analysisResp.data?.body?.string() ?: ""
@@ -228,16 +217,60 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
         if (analysis2Code.isNotEmpty()) {
             NetworkUtils.request(NetworkUtils.buildClientRequest(URL.getAnalysis2Path(analysis2Code)))
         }
-        DebugLogCollector.d(QR_DEBUG, "预签到完成")
     }
 
-    private suspend fun querySignType(aid: String): String {
-        val signTypeUrl = URL.getSignType(aid)
-        val signTypeResp = NetworkUtils.request(NetworkUtils.buildClientRequest(signTypeUrl))
-        val body = signTypeResp.data?.body?.string() ?: ""
-        DebugLogCollector.d(QR_DEBUG, "签到类型响应: ${body.take(300)}")
-        return body
+    /**
+     * 查询签到详情(含ifNeedVCode/openCheckFaceFlag/ifPhoto + otherId/clazzId/courseId)
+     * 合并原 querySignInfoDetail + querySignType 为一次请求
+     */
+    private suspend fun querySignInfo(aid: String): SignInfo? {
+        // 优先用 v2 API (信息最全)
+        try {
+            val url = "https://mobilelearn.chaoxing.com/v2/apis/active/getPPTActiveInfo?activeId=$aid&duid=&denc="
+            val resp = NetworkUtils.request(NetworkUtils.buildClientRequest(url))
+            val body = resp.data?.body?.string() ?: return null
+            val json = body.safeParseToJson() ?: return null
+            val data = json.getJSONObject("data") ?: return null
+            return SignInfo(
+                otherId = data.getString("otherId") ?: "",
+                clazzId = data.getString("clazzId") ?: "",
+                courseId = data.getString("courseId") ?: "",
+                needVCode = data.getIntValue("ifNeedVCode") == 1,
+                needFace = data.getIntValue("openCheckFaceFlag") == 1,
+                needPhoto = data.getIntValue("ifPhoto") == 1
+            )
+        } catch (e: Exception) {
+            DebugLogCollector.w(QR_DEBUG, "v2详情查询失败: ${e.message}, 降级signDetail")
+        }
+        // 降级: 用 signDetail API
+        return try {
+            val url = "https://mobilelearn.chaoxing.com/newsign/signDetail?activePrimaryId=$aid&type=1"
+            val resp = NetworkUtils.request(NetworkUtils.buildClientRequest(url))
+            val body = resp.data?.body?.string() ?: return null
+            val json = body.safeParseToJson() ?: return null
+            SignInfo(
+                otherId = json.getString("otherId") ?: "",
+                clazzId = json.getString("clazzId") ?: "",
+                courseId = json.getString("courseId") ?: "",
+                needVCode = json.getIntValue("ifNeedVCode") == 1,
+                needFace = json.getIntValue("openCheckFaceFlag") == 1,
+                needPhoto = json.getString("ifPhoto") == "1"
+            )
+        } catch (e: Exception) {
+            DebugLogCollector.e(QR_DEBUG, "签到详情查询全部失败", e)
+            null
+        }
     }
+
+    /** 签到详情数据类 */
+    data class SignInfo(
+        val otherId: String,
+        val clazzId: String,
+        val courseId: String,
+        val needVCode: Boolean,
+        val needFace: Boolean,
+        val needPhoto: Boolean
+    )
 
     /**
      * 处理签到响应(保留供防作弊入口使用)
@@ -273,7 +306,6 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
             }
 
             // 2. 获取上传token
-            DebugLogCollector.d(QR_DEBUG, "获取上传token...")
             val tokenResp = NetworkUtils.request(NetworkUtils.buildClientRequest(URL.getUploadToken()))
             val tokenBody = tokenResp.data?.body?.string() ?: ""
             val tokenData = tokenBody.safeParseToJson()
@@ -282,10 +314,8 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
                 DebugLogCollector.w(QR_DEBUG, "获取上传token失败: $tokenBody")
                 return false
             }
-            DebugLogCollector.d(QR_DEBUG, "上传token获取成功")
 
             // 3. 上传照片到超星云盘
-            DebugLogCollector.d(QR_DEBUG, "上传预设照片: ${photoFile.name}, 大小: ${photoFile.length()}")
             val uploadResp = NetworkUtils.post(URL.getUploadImagePath(token), photoFile)
             val uploadBody = uploadResp.data?.body?.string() ?: ""
             val uploadData = uploadBody.safeParseToJson()
@@ -294,20 +324,16 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
                 DebugLogCollector.w(QR_DEBUG, "照片上传失败: $uploadBody")
                 return false
             }
-            DebugLogCollector.d(QR_DEBUG, "照片上传成功, objectId: $objectId")
 
             // 4. 优先使用submitPhotoValidate提交照片证据(最小参数, 不重签)
-            DebugLogCollector.d(QR_DEBUG, "方式A: submitPhotoValidate提交validate=$validateToken")
             var vResp = NetworkUtils.submitPhotoValidate(aid, uid, validateToken, objectId)
             var vBody = vResp.data?.body?.string() ?: ""
-            DebugLogCollector.d(QR_DEBUG, "validate提交响应: $vBody")
             if (vBody.contains("成功") || vBody.contains("success")) {
                 withContext(Dispatchers.Main) { ToastUtils.show("拍照验证签到成功!") }
                 return true
             }
 
             // 5. 方式B: 带objectId+validate+位置 完整POST签到
-            DebugLogCollector.d(QR_DEBUG, "方式B: 完整POST签到 (validate+objectId+location)")
             var signResp = NetworkUtils.postSign(
                 aid = aid, uid = uid, fid = CacheUtils.cache["fid"] ?: "",
                 name = CacheUtils.cache["username"] ?: "",
@@ -315,14 +341,12 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
                 objectId = objectId, validate = validateToken
             )
             var signBody = signResp.data?.body?.string() ?: ""
-            DebugLogCollector.d(QR_DEBUG, "POST签到响应(带validate): $signBody")
             if (signBody.contains("成功") || signBody.contains("success")) {
                 withContext(Dispatchers.Main) { ToastUtils.show("拍照验证签到成功!") }
                 return true
             }
 
             // 6. 方式C: 不带validate, 仅objectId
-            DebugLogCollector.d(QR_DEBUG, "方式C: 不带validate仅objectId")
             signResp = NetworkUtils.postSign(
                 aid = aid, uid = uid, fid = CacheUtils.cache["fid"] ?: "",
                 name = CacheUtils.cache["username"] ?: "",
@@ -330,14 +354,12 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
                 objectId = objectId
             )
             signBody = signResp.data?.body?.string() ?: ""
-            DebugLogCollector.d(QR_DEBUG, "POST签到响应(仅objectId): $signBody")
             if (signBody.contains("成功") || signBody.contains("success")) {
                 withContext(Dispatchers.Main) { ToastUtils.show("拍照验证签到成功!") }
                 return true
             }
 
             // 7. 方式D: GET签到+objectId
-            DebugLogCollector.d(QR_DEBUG, "方式D: GET+objectId")
             val getResp = NetworkUtils.getSign(
                 aid = aid, uid = uid, fid = CacheUtils.cache["fid"] ?: "",
                 name = CacheUtils.cache["username"] ?: "",
@@ -345,7 +367,6 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
                 objectId = objectId
             )
             val getBody = getResp.data?.body?.string() ?: ""
-            DebugLogCollector.d(QR_DEBUG, "GET签到响应: $getBody")
             if (getBody.contains("成功") || getBody.contains("success")) {
                 withContext(Dispatchers.Main) { ToastUtils.show("拍照验证签到成功!") }
                 return true
@@ -365,54 +386,45 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
         lat: String, lon: String, addr: String
     ): Boolean {
         try {
-            DebugLogCollector.d(QR_DEBUG, "===== 处理人脸识别防作弊(checkFace), token=$faceToken =====")
-
             // 1. 生成随机objectId (32位随机字符串)
             val chars = "abcdefghijklmnopqrstuvwxyz0123456789"
             val objectId = (1..32).map { chars.random() }.joinToString("")
-            DebugLogCollector.d(QR_DEBUG, "生成随机objectId: $objectId")
 
-            // 2. 获取clazzId和courseId (从签到类型响应中获取)
+            // 2. 获取clazzId和courseId
             val signTypeBody = querySignType(aid)
             val signTypeData = signTypeBody.safeParseToJson()
             val clazzId = signTypeData.getStringExt("clazzId") ?: ""
             val courseId = signTypeData.getStringExt("courseId") ?: ""
-            DebugLogCollector.d(QR_DEBUG, "checkFace参数: clazzId=$clazzId, courseId=$courseId")
 
             // 3. 方式1: 调用mooc1-api updateqrstatus (一版本人脸识别)
-            DebugLogCollector.d(QR_DEBUG, "方式1: 调用updateqrstatus (一版本人脸识别)")
             try {
                 val updateUrl = "https://mooc1-api.chaoxing.com/qr/updateqrstatus"
                 val updateParams = "clazzId=$clazzId&courseId=$courseId&uuid=$faceToken&objectId=$objectId&qrcEnc=&failCount=0&compareResult=0"
                 val updateResp = NetworkUtils.request(NetworkUtils.buildClientRequest("$updateUrl?$updateParams"))
                 val updateBody = updateResp.data?.body?.string() ?: ""
-                DebugLogCollector.d(QR_DEBUG, "updateqrstatus响应: $updateBody")
                 if (updateBody.contains("成功") || updateBody.contains("success") || updateBody.contains("true")) {
                     withContext(Dispatchers.Main) { ToastUtils.show("人脸识别签到成功!(方式1)") }
                     return true
                 }
             } catch (e: Exception) {
-                DebugLogCollector.w(QR_DEBUG, "方式1异常: ${e.message}")
+                DebugLogCollector.w(QR_DEBUG, "updateqrstatus异常: ${e.message}")
             }
 
             // 4. 方式2: 调用mooc1-api uploadInfo (二版本人脸识别)
-            DebugLogCollector.d(QR_DEBUG, "方式2: 调用uploadInfo (二版本人脸识别)")
             try {
                 val uploadInfoUrl = "https://mooc1-api.chaoxing.com/knowledge/uploadInfo"
                 val uploadParams = "clazzId=$clazzId&courseId=$courseId&knowledgeId=0&uuid=$faceToken&objectId=$objectId"
                 val uploadResp = NetworkUtils.request(NetworkUtils.buildClientRequest("$uploadInfoUrl?$uploadParams"))
                 val uploadBody = uploadResp.data?.body?.string() ?: ""
-                DebugLogCollector.d(QR_DEBUG, "uploadInfo响应: $uploadBody")
                 if (uploadBody.contains("成功") || uploadBody.contains("success") || uploadBody.contains("true")) {
                     withContext(Dispatchers.Main) { ToastUtils.show("人脸识别签到成功!(方式2)") }
                     return true
                 }
             } catch (e: Exception) {
-                DebugLogCollector.w(QR_DEBUG, "方式2异常: ${e.message}")
+                DebugLogCollector.w(QR_DEBUG, "uploadInfo异常: ${e.message}")
             }
 
             // 5. 方式3: 带objectId重新POST签到
-            DebugLogCollector.d(QR_DEBUG, "方式3: 带objectId重新POST签到")
             try {
                 val signResp = NetworkUtils.postSign(
                     aid = aid, uid = uid, fid = CacheUtils.cache["fid"] ?: "",
@@ -421,7 +433,6 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
                     objectId = objectId
                 )
                 val signBody = signResp.data?.body?.string() ?: ""
-                DebugLogCollector.d(QR_DEBUG, "带objectId POST签到响应: $signBody")
                 if (signBody.contains("成功") || signBody.contains("success")) {
                     withContext(Dispatchers.Main) { ToastUtils.show("人脸识别签到成功!(方式3)") }
                     return true
@@ -429,15 +440,13 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
                 // 如果返回validate_, 走拍照验证流程
                 if (signBody.startsWith("validate_")) {
                     val validateToken = signBody.removePrefix("validate_")
-                    DebugLogCollector.d(QR_DEBUG, "checkFace后需拍照验证, token=$validateToken")
                     return handleValidateSign(aid, uid, validateToken, lat, lon, addr)
                 }
             } catch (e: Exception) {
-                DebugLogCollector.w(QR_DEBUG, "方式3异常: ${e.message}")
+                DebugLogCollector.w(QR_DEBUG, "POST签到异常: ${e.message}")
             }
 
             // 6. 方式4: 上传预设照片获取真实objectId, 再POST签到
-            DebugLogCollector.d(QR_DEBUG, "方式4: 上传预设照片获取objectId")
             try {
                 val photoDir = java.io.File(requireContext().getExternalFilesDir(null), "preset_photo")
                 val photoFile = if (photoDir.exists() && photoDir.isDirectory) {
@@ -455,12 +464,10 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
                         val uploadData = uploadBody.safeParseToJson()
                         val realObjectId = uploadData?.getStringExt("objectId") ?: ""
                         if (realObjectId.isNotEmpty()) {
-                            DebugLogCollector.d(QR_DEBUG, "照片上传成功, realObjectId: $realObjectId")
                             // 用真实objectId调用updateqrstatus
                             val updateParams2 = "clazzId=$clazzId&courseId=$courseId&uuid=$faceToken&objectId=$realObjectId&qrcEnc=&failCount=0&compareResult=0"
                             val updateResp2 = NetworkUtils.request(NetworkUtils.buildClientRequest("https://mooc1-api.chaoxing.com/qr/updateqrstatus?$updateParams2"))
                             val updateBody2 = updateResp2.data?.body?.string() ?: ""
-                            DebugLogCollector.d(QR_DEBUG, "真实objectId updateqrstatus响应: $updateBody2")
                             if (updateBody2.contains("成功") || updateBody2.contains("success") || updateBody2.contains("true")) {
                                 withContext(Dispatchers.Main) { ToastUtils.show("人脸识别签到成功!(方式4)") }
                                 return true
@@ -473,7 +480,6 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
                                 objectId = realObjectId
                             )
                             val signBody2 = signResp2.data?.body?.string() ?: ""
-                            DebugLogCollector.d(QR_DEBUG, "真实objectId POST响应: $signBody2")
                             if (signBody2.contains("成功") || signBody2.contains("success")) {
                                 withContext(Dispatchers.Main) { ToastUtils.show("人脸识别签到成功!(方式4-POST)") }
                                 return true
@@ -503,7 +509,6 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
     private suspend fun autoLocationSign(aid: String) {
         val uid = CacheUtils.cache["uid"] ?: ""
 
-        DebugLogCollector.d(QR_DEBUG, "--- 尝试定位签到(POST) ---")
         try {
             var nativeLat = 0.0
             var nativeLon = 0.0
@@ -520,14 +525,12 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
                 }
             )
             if (nativeLat != 0.0 && nativeLon != 0.0) {
-                DebugLogCollector.d(QR_DEBUG, "定位成功: lat=$nativeLat, lon=$nativeLon, addr=$nativeAddr")
                 val resp = NetworkUtils.postSign(
                     aid = aid, uid = uid, fid = CacheUtils.cache["fid"] ?: "",
                     name = CacheUtils.cache["username"] ?: "",
                     latitude = nativeLat.toString(), longitude = nativeLon.toString(), address = nativeAddr
                 )
                 val body = resp.data?.body?.string() ?: ""
-                DebugLogCollector.d(QR_DEBUG, "定位签到响应: $body")
                 val result = handleSignResponse(body, aid, aid, uid, nativeLat.toString(), nativeLon.toString(), nativeAddr)
                 if (result) return
                 DebugLogCollector.w(QR_DEBUG, "定位签到失败, 尝试预设地址")
@@ -543,7 +546,6 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
 
         if (presets.isNotEmpty()) {
             for ((index, loc) in presets.withIndex()) {
-                DebugLogCollector.d(QR_DEBUG, "尝试预设地址${index + 1}: ${loc.name}")
                 val lating = NativeLocationUtils.wgs84ToBd09(loc.longitude, loc.latitude)
                 val resp = NetworkUtils.postSign(
                     aid = aid, uid = uid, fid = CacheUtils.cache["fid"] ?: "",
@@ -552,7 +554,6 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
                     address = loc.address.ifEmpty { loc.name }
                 )
                 val body = resp.data?.body?.string() ?: ""
-                DebugLogCollector.d(QR_DEBUG, "预设地址${index + 1}响应: $body")
                 if (body.contains("成功") || body.contains("success")) {
                     withContext(Dispatchers.Main) { ToastUtils.show("定位签到成功! 地址: ${loc.name}") }
                     return
@@ -601,7 +602,6 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
 
     private suspend fun bruteForceSignCode(aid: String, signId: String, isGesture: Boolean) {
         val codes = if (isGesture) generateGestureCodes() else generateDigitCodes()
-        DebugLogCollector.d(QR_DEBUG, "暴力破解开始, 模式: ${if (isGesture) "手势" else "签到码"}, 候选码数量: ${codes.size}")
         withContext(Dispatchers.Main) { ToastUtils.show("正在自动尝试${if (isGesture) "手势" else "签到码"}...") }
 
         for ((index, code) in codes.withIndex()) {
@@ -610,12 +610,9 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
                 val checkResp = NetworkUtils.request(NetworkUtils.buildClientRequest(checkUrl))
                 val checkBody = checkResp.data?.body?.string() ?: ""
                 if (checkBody.contains("true") || checkBody.contains("success") || checkBody.contains("正确")) {
-                    DebugLogCollector.d(QR_DEBUG, "找到正确签到码: $code (第${index + 1}次尝试)")
                     val signUrl = URL.getNormalSignPath("", "", signId, code)
-                    DebugLogCollector.d(QR_DEBUG, "使用签到码签到, URL: $signUrl")
                     val signResp = NetworkUtils.request(NetworkUtils.buildClientRequest(signUrl))
                     val signBody = signResp.data?.body?.string() ?: ""
-                    DebugLogCollector.d(QR_DEBUG, "签到响应: $signBody")
                     withContext(Dispatchers.Main) {
                         if (signBody.contains("成功") || signBody.contains("success")) {
                             ToastUtils.show("暴力破解成功! 签到码: $code")
@@ -629,7 +626,6 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
                     return
                 }
                 if (index % 50 == 0 && index > 0) {
-                    DebugLogCollector.d(QR_DEBUG, "已尝试 $index/${codes.size}...")
                     withContext(Dispatchers.Main) { ToastUtils.show("尝试中: $index/${codes.size}") }
                 }
                 delay(80)
@@ -696,12 +692,10 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
                     ToastUtils.show("请输入签到码")
                     return@setPositiveButton
                 }
-                DebugLogCollector.d(QR_DEBUG, "手动输入签到码: $code")
                 lifecycleScope.launch(Dispatchers.IO) {
                     val signUrl = URL.getNormalSignPath("", "", signId, code)
                     val signResp = NetworkUtils.request(NetworkUtils.buildClientRequest(signUrl))
                     val signBody = signResp.data?.body?.string() ?: ""
-                    DebugLogCollector.d(QR_DEBUG, "手动签到响应: $signBody")
                     withContext(Dispatchers.Main) {
                         if (signBody.contains("成功") || signBody.contains("success")) {
                             ToastUtils.show("签到成功!")
@@ -722,11 +716,9 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
     ) {
         val signWith = requireActivity().getBySp("signWith")?.toBoolean() ?: false
         if (!signWith) {
-            DebugLogCollector.d(QR_DEBUG, "代签功能未开启, 跳过proxySign")
             return
         }
 
-        DebugLogCollector.d(QR_DEBUG, "--- 代签: ProxySignManager ---")
         val manager = ProxySignManager(
             context = requireContext(),
             aid = aid,
@@ -746,12 +738,10 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
 
         manager.loadUsers()
         if (manager.getUserCount() == 0) {
-            DebugLogCollector.d(QR_DEBUG, "无代签用户")
             return
         }
 
         val summary = manager.signForAll()
-        DebugLogCollector.d(QR_DEBUG, "代签完成: 成功${summary.successCount} 失败${summary.failCount} 共${summary.totalCount} 废弃${summary.obsoleteUsers.size}")
         withContext(Dispatchers.Main) {
             var msg = "代签: 成功${summary.successCount} 失败${summary.failCount} 共${summary.totalCount}"
             if (summary.obsoleteUsers.isNotEmpty()) {
@@ -764,11 +754,9 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
     private suspend fun proxySignWithUrl(signUrl: String, aid: String) {
         val signWith = requireActivity().getBySp("signWith")?.toBoolean() ?: false
         if (!signWith) {
-            DebugLogCollector.d(QR_DEBUG, "代签功能未开启, 跳过proxySign")
             return
         }
 
-        DebugLogCollector.d(QR_DEBUG, "--- 代签(URL): ProxySignManager ---")
         val manager = ProxySignManager(
             context = requireContext(),
             aid = aid
@@ -784,7 +772,6 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
         if (manager.getUserCount() == 0) return
 
         val summary = manager.signForAll()
-        DebugLogCollector.d(QR_DEBUG, "代签完成: 成功${summary.successCount} 失败${summary.failCount} 共${summary.totalCount}")
         withContext(Dispatchers.Main) {
             ToastUtils.show("代签完成: 成功${summary.successCount} 失败${summary.failCount} 共${summary.totalCount}")
         }
@@ -926,35 +913,29 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
         lifecycleScope.launch(Dispatchers.IO) {
             try {
                 val uid = CacheUtils.cache["uid"] ?: ""
-                DebugLogCollector.d(QR_DEBUG, "===== 智能签到: aid=$aid =====")
-                withContext(Dispatchers.Main) { ToastUtils.show("智能签到分析中...") }
 
-                // 1. 预签到
+                // 1. 预签到 + 获取签到详情(合并为最少请求)
                 doPreSign(aid)
+                val info = querySignInfo(aid)
+                val otherId = info?.otherId ?: ""
+                val clazzId = info?.clazzId ?: ""
+                val courseId = info?.courseId ?: ""
+                val needVCode = info?.needVCode == true
+                val needFace = info?.needFace == true
+                val needPhoto = info?.needPhoto == true
 
-                // 2. 获取签到详情(含ifNeedVCode/openCheckFaceFlag/ifPhoto)
-                val signInfo = querySignInfoDetail(aid)
-                val needVCode = FaceUploadHelper.isCaptchaRequired(signInfo)
-                val needFace = FaceUploadHelper.isFaceRequired(signInfo)
-                val needPhoto = FaceUploadHelper.isPhotoRequired(signInfo)
-                DebugLogCollector.d(QR_DEBUG, "智能分析: needVCode=$needVCode, needFace=$needFace, needPhoto=$needPhoto")
-
-                // 3. 获取签到类型
-                val signTypeBody = querySignType(aid)
-                val signTypeData = signTypeBody.safeParseToJson()
-                val otherId = signTypeData?.getStringExt("otherId") ?: ""
-                val clazzId = signTypeData?.getStringExt("clazzId") ?: ""
-                val courseId = signTypeData?.getStringExt("courseId") ?: ""
-
-                // 4. 提前处理人脸识别(获取faceEnc)
+                // 2. 并行预处理: 人脸/验证码/照片/定位
                 var faceEnc: String? = null
+                var captchaValidate: String? = null
+                var objectId: String? = null
+                var lat = "-1"; var lon = "-1"; var addr = ""
+
+                // 2a. 人脸识别(需UI交互, 串行)
                 if (needFace) {
-                    DebugLogCollector.d(QR_DEBUG, "需要人脸识别, 获取clientId + faceEnc...")
                     withContext(Dispatchers.Main) { ToastUtils.show("需人脸验证, 处理中...") }
                     val clientId = FaceUploadHelper.fetchClientId(requireContext())
                     if (clientId != null) {
                         CacheUtils.cache["clientId"] = clientId
-                        // 尝试用预设照片获取faceEnc
                         val photoDir = java.io.File(requireContext().getExternalFilesDir(null), "preset_photo")
                         val photoFile = photoDir.listFiles()?.firstOrNull { it.extension.lowercase() in listOf("jpg", "jpeg", "png") }
                         if (photoFile != null && photoFile.exists()) {
@@ -963,76 +944,60 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
                                 val faceObjectId = FaceUploadHelper.uploadFaceImage(requireContext(), bitmap)
                                 if (faceObjectId != null) {
                                     faceEnc = FaceUploadHelper.getFaceEnc(aid, faceObjectId, clientId)
-                                    DebugLogCollector.d(QR_DEBUG, "faceEnc获取: ${if (faceEnc != null) "成功" else "失败"}")
                                 }
                             }
                         }
-                    } else {
-                        DebugLogCollector.d(QR_DEBUG, "获取clientId失败, 使用备用方式")
                     }
+                    if (faceEnc == null) DebugLogCollector.w(QR_DEBUG, "faceEnc获取失败")
                 }
 
-                // 5. 提前处理验证码(使用滑块验证码, 不阻塞签到流程)
-                var captchaValidate: String? = null
+                // 2b. 验证码(需UI交互, 串行)
                 if (needVCode) {
-                    DebugLogCollector.d(QR_DEBUG, "需要验证码, 使用滑块验证码...")
                     val cData = CaptchaHelper.getCaptchaImage(
                         courseId = courseId, classId = clazzId,
-                        activeId = aid, uid = CacheUtils.cache["uid"] ?: ""
+                        activeId = aid, uid = uid
                     )
                     if (cData != null) {
-                        DebugLogCollector.d(QR_DEBUG, "验证码图片获取成功, 弹窗等待滑动...")
                         withContext(Dispatchers.Main) {
                             val dialog = com.cofbro.qian.view.dialog.SliderCaptchaDialog(
                                 context = requireContext(), captchaData = cData,
-                                activeId = aid, uid = CacheUtils.cache["uid"] ?: "",
+                                activeId = aid, uid = uid,
                                 courseId = courseId, classId = clazzId,
                                 onResult = { captchaValidate = it }
                             )
                             dialog.show()
                         }
                         var w = 0; while (captchaValidate == null && w < 120) { delay(500); w++ }
-                        if (captchaValidate != null) {
-                            DebugLogCollector.d(QR_DEBUG, "验证码滑动完成: ${captchaValidate!!.take(20)}...")
-                        } else {
-                            DebugLogCollector.w(QR_DEBUG, "验证码等待超时(60s), 跳过")
-                        }
+                        if (captchaValidate == null) DebugLogCollector.w(QR_DEBUG, "验证码等待超时(60s)")
                     } else {
-                        DebugLogCollector.w(QR_DEBUG, "获取验证码图片失败, 无法弹窗")
+                        DebugLogCollector.w(QR_DEBUG, "获取验证码图片失败")
                     }
                 }
 
-                // 6. 提前处理照片上传
-                var objectId: String? = null
+                // 2c. 照片上传(纯IO, 快速)
                 if (needPhoto) {
                     val (success, objId) = NetworkUtils.preUploadPhoto()
                     if (success) objectId = objId
                 }
 
-                // 7. 获取位置: 真机GPS → 缓存 → 预设地址 (修复errorLocation1)
-                var lat = "-1"; var lon = "-1"; var addr = ""
-                // 7a. 尝试真机GPS定位
+                // 2d. 获取位置: GPS → 缓存 → 预设地址
                 var nativeLat = 0.0; var nativeLon = 0.0; var nativeAddr = ""
                 try {
                     NativeLocationUtils.getCurrentLocation(
                         requireContext(),
                         onSuccess = { l1, l2, a -> nativeLat = l1; nativeLon = l2; nativeAddr = a },
-                        onError = { DebugLogCollector.w(QR_DEBUG, "定位失败: $it") }
+                        onError = {}
                     )
                 } catch (_: Exception) {}
                 if (nativeLat != 0.0 && nativeLon != 0.0) {
                     lat = nativeLat.toString(); lon = nativeLon.toString(); addr = nativeAddr
-                    DebugLogCollector.d(QR_DEBUG, "使用GPS定位: lat=$lat, lon=$lon")
                 } else {
-                    // 7b. 尝试缓存位置
                     CacheUtils.cache["default_Sign_latitude"]?.let { cacheLat ->
                         CacheUtils.cache["default_Sign_longitude"]?.let { cacheLon ->
                             lat = cacheLat; lon = cacheLon
                             addr = CacheUtils.cache["default_Sign_Location"] ?: ""
-                            DebugLogCollector.d(QR_DEBUG, "使用缓存位置: lat=$lat, lon=$lon")
                         }
                     }
-                    // 7c. 尝试预设地址
                     if (lat == "-1") {
                         val presets = PresetLocationManager.loadAll(requireContext())
                         if (presets.isNotEmpty()) {
@@ -1040,141 +1005,37 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
                             val bdLatLon = NativeLocationUtils.wgs84ToBd09(loc.longitude, loc.latitude)
                             lat = bdLatLon.latitude.toString(); lon = bdLatLon.longitude.toString()
                             addr = loc.address.ifEmpty { loc.name }
-                            DebugLogCollector.d(QR_DEBUG, "使用预设地址[0]: ${loc.name}, lat=$lat, lon=$lon")
                         }
                     }
                 }
 
-                when (otherId) {
-                    Constants.SIGN.SCAN_QR -> {
-                        // QR码签到: 一次性带所有参数
-                        if (!fullIdParams.isNullOrEmpty()) {
-                            var body = ""
-                            // 先尝试带真实坐标签到
-                            val locationJson = """{"result":1,"latitude":$lat,"longitude":$lon,"address":"$addr"}"""
-                            val locationEncoded = java.net.URLEncoder.encode(locationJson, "UTF-8")
-                            val sb = StringBuilder("https://mobilelearn.chaoxing.com/pptSign/stuSignajax?activeId=$fullIdParams&location=$locationEncoded&uid=$uid")
-                            faceEnc?.let { sb.append("&currentFaceId=${CacheUtils.cache["faceObjectId"] ?: ""}&ifCFP=0&courseId=$courseId&faceEnc=$it") }
-                            objectId?.let { sb.append("&objectId=$it") }
-                            captchaValidate?.let { sb.append("&validate=$it") }
+                // 3. 执行签到: 正确路径(单次GET) → 保底策略(errorLocation/validate)
+                val signResult = executeSign(
+                    aid = aid, uid = uid, otherId = otherId,
+                    fullIdParams = fullIdParams, enc = enc,
+                    lat = lat, lon = lon, addr = addr,
+                    courseId = courseId, clazzId = clazzId,
+                    faceEnc = faceEnc, objectId = objectId, captchaValidate = captchaValidate
+                )
 
-                            val finalUrl = sb.toString()
-                            DebugLogCollector.d(QR_DEBUG, "智能签到URL: ${finalUrl.take(200)}...")
-                            val resp = NetworkUtils.request(NetworkUtils.buildClientRequest(finalUrl))
-                            body = resp.data?.body?.string() ?: ""
-                            DebugLogCollector.d(QR_DEBUG, "签到响应: $body")
-
-                            // 如果仍然errorLocation, 遍历预设地址重试
-                            if (body.startsWith("errorLocation")) {
-                                DebugLogCollector.d(QR_DEBUG, "位置仍不在范围, 遍历预设地址重试...")
-                                val presets = PresetLocationManager.loadAll(requireContext())
-                                for ((i, loc) in presets.withIndex()) {
-                                    val bdLatLon = NativeLocationUtils.wgs84ToBd09(loc.longitude, loc.latitude)
-                                    val retryAddr = loc.address.ifEmpty { loc.name }
-                                    val retryLocJson = """{"result":1,"latitude":${bdLatLon.latitude},"longitude":${bdLatLon.longitude},"address":"$retryAddr"}"""
-                                    val retrySb = StringBuilder("https://mobilelearn.chaoxing.com/pptSign/stuSignajax?activeId=$fullIdParams&location=${java.net.URLEncoder.encode(retryLocJson, "UTF-8")}&uid=$uid")
-                                    faceEnc?.let { retrySb.append("&currentFaceId=${CacheUtils.cache["faceObjectId"] ?: ""}&ifCFP=0&courseId=$courseId&faceEnc=$it") }
-                                    objectId?.let { retrySb.append("&objectId=$it") }
-                                    captchaValidate?.let { retrySb.append("&validate=$it") }
-                                    val retryResp = NetworkUtils.request(NetworkUtils.buildClientRequest(retrySb.toString()))
-                                    body = retryResp.data?.body?.string() ?: ""
-                                    DebugLogCollector.d(QR_DEBUG, "预设地址[${i}]签到: $body")
-                                    if (body.contains("成功") || body.contains("success")) break
-                                    if (body.startsWith("validate_")) break
-                                    if (body.startsWith("checkFace_")) break
-                                    if (body.contains("重新扫描") || body.contains("已截止")) break
-                                }
-                            }
-
-                            // CSF对齐: 已签到也触发代签(本人签过了, 但代签用户可能没签)
-                            var isSuccess = body.contains("成功") || body.contains("success") || body.contains("已签到")
-
-                            // CSF对齐: validate_响应在IO线程处理(区分验证码/拍照)
-                            if (!isSuccess && body.startsWith("validate_")) {
-                                val signResult = com.cofbro.qian.signer.SignResult.fromBody(body)
-                                if (signResult.captchaToken != null && !captchaValidate.isNullOrEmpty()) {
-                                    // 滑块验证码 → 用预获取的validate结果重签(IO线程)
-                                    DebugLogCollector.d(QR_DEBUG, "识别为滑块验证码, 用预获取validate重签...")
-                                    val retrySb = StringBuilder("https://mobilelearn.chaoxing.com/pptSign/stuSignajax?activeId=$fullIdParams&location=$locationEncoded&uid=$uid")
-                                    faceEnc?.let { retrySb.append("&currentFaceId=${CacheUtils.cache["faceObjectId"] ?: ""}&ifCFP=0&courseId=$courseId&faceEnc=$it") }
-                                    objectId?.let { retrySb.append("&objectId=$it") }
-                                    retrySb.append("&validate=$captchaValidate")
-                                    val retryResp = NetworkUtils.request(NetworkUtils.buildClientRequest(retrySb.toString()))
-                                    body = retryResp.data?.body?.string() ?: ""
-                                    isSuccess = body.contains("成功") || body.contains("success")
-                                    DebugLogCollector.d(QR_DEBUG, "验证码重签响应: $body")
-                                }
-                            }
-
-                            withContext(Dispatchers.Main) {
-                                if (isSuccess) {
-                                    ToastUtils.show("智能签到成功!")
-                                } else if (body.startsWith("validate_")) {
-                                    val signResult = com.cofbro.qian.signer.SignResult.fromBody(body)
-                                    if (signResult.captchaToken != null) {
-                                        DebugLogCollector.w(QR_DEBUG, "验证码未预获取, 无法自动重签")
-                                        ToastUtils.show("需要滑块验证码")
-                                    } else {
-                                        // 拍照验证
-                                        val vToken = signResult.validateToken ?: body.removePrefix("validate_")
-                                        handleValidateSign(aid, uid, vToken, lat, lon, addr)
-                                    }
-                                } else if (body.startsWith("checkFace_")) {
-                                    val fToken = body.removePrefix("checkFace_")
-                                    handleCheckFaceSign(aid, uid, fToken, lat, lon, addr)
-                                } else {
-                                    if (body.contains("已签到")) ToastUtils.show("已签到过了, 正在代签...")
-                                    else ToastUtils.show("签到结果: $body")
-                                }
-                            }
-                            // 本人签到成功后触发代签 (含已签到)
-                            if (isSuccess) {
-                                val preparedParams = buildPreparedParams(faceEnc, objectId, captchaValidate, courseId, clazzId)
-                                proxySignForAccounts(aid, fullIdParams ?: aid, enc = enc,
-                                    preparedParams = preparedParams, lat = lat, lon = lon, addr = addr)
-                            }
-                        }
+                // 4. 处理签到结果
+                val isSuccess = signResult.isSuccess() || signResult.isAlreadySigned
+                withContext(Dispatchers.Main) {
+                    when {
+                        isSuccess && signResult.isAlreadySigned -> ToastUtils.show("已签到过了, 正在代签...")
+                        isSuccess -> ToastUtils.show("智能签到成功!")
+                        signResult.captchaToken != null -> ToastUtils.show("需要滑块验证码")
+                        signResult.validateToken != null -> handleValidateSign(aid, uid, signResult.validateToken!!, lat, lon, addr)
+                        signResult.faceToken != null -> handleCheckFaceSign(aid, uid, signResult.faceToken!!, lat, lon, addr)
+                        else -> ToastUtils.show("签到结果: ${signResult.message}")
                     }
-                    else -> {
-                        // 非QR签到: POST + 预设地址遍历
-                        var body = ""
-                        val resp = NetworkUtils.postSign(aid = aid, uid = uid,
-                            fid = CacheUtils.cache["fid"] ?: "", name = CacheUtils.cache["username"] ?: "",
-                            latitude = lat, longitude = lon, address = addr,
-                            objectId = objectId)
-                        body = resp.data?.body?.string() ?: ""
+                }
 
-                        // POST失败且是errorLocation → 遍历预设地址
-                        if (body.startsWith("errorLocation") || body.contains("errorLocation")) {
-                            DebugLogCollector.d(QR_DEBUG, "POST位置不在范围, 遍历预设地址...")
-                            val presets = PresetLocationManager.loadAll(requireContext())
-                            for ((i, loc) in presets.withIndex()) {
-                                val bdLatLon = NativeLocationUtils.wgs84ToBd09(loc.longitude, loc.latitude)
-                                val locAddr = loc.address.ifEmpty { loc.name }
-                                val retryResp = NetworkUtils.postSign(aid = aid, uid = uid,
-                                    fid = CacheUtils.cache["fid"] ?: "", name = CacheUtils.cache["username"] ?: "",
-                                    latitude = bdLatLon.latitude.toString(), longitude = bdLatLon.longitude.toString(),
-                                    address = locAddr, objectId = objectId)
-                                body = retryResp.data?.body?.string() ?: ""
-                                DebugLogCollector.d(QR_DEBUG, "预设地址[${i}]POST签到: $body")
-                                if (body.contains("成功") || body.contains("success")) break
-                                if (body.startsWith("validate_")) break
-                                if (body.startsWith("checkFace_")) break
-                            }
-                        }
-
-                        DebugLogCollector.d(QR_DEBUG, "智能签到响应: $body")
-                        val isPostSuccess = body.contains("成功") || body.contains("success") || body.contains("已签到")
-                        withContext(Dispatchers.Main) {
-                            if (body.contains("已签到")) ToastUtils.show("已签到过了, 正在代签...")
-                            else ToastUtils.show("签到结果: $body")
-                        }
-                        if (isPostSuccess) {
-                            val preparedParams = buildPreparedParams(faceEnc, objectId, captchaValidate, courseId, clazzId)
-                            proxySignForAccounts(aid, fullIdParams ?: aid, enc = enc,
-                                preparedParams = preparedParams, lat = lat, lon = lon, addr = addr)
-                        }
-                    }
+                // 5. 代签(本人签过了也触发, 代签用户可能没签)
+                if (isSuccess) {
+                    val preparedParams = buildPreparedParams(faceEnc, objectId, captchaValidate, courseId, clazzId)
+                    proxySignForAccounts(aid, fullIdParams ?: aid, enc = enc,
+                        preparedParams = preparedParams, lat = lat, lon = lon, addr = addr)
                 }
             } catch (e: Exception) {
                 DebugLogCollector.e(QR_DEBUG, "智能签到异常", e)
@@ -1184,19 +1045,108 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
     }
 
     /**
-     * 查询签到详情(含ifNeedVCode, openCheckFaceFlag等)
+     * 执行签到: 正确路径前置, 保底策略后置
+     *
+     * QR签到正确路径: GET stuSignajax?activeId=fullIdParams&location=...&uid=...&enc=...
+     * 非QR签到正确路径: POST stuSignajax (带坐标+objectId)
+     *
+     * 保底策略:
+     * - errorLocation → 遍历预设地址
+     * - validate_(验证码) → 用预获取validate重签
+     * - validate_(拍照) → handleValidateSign
+     * - checkFace_ → handleCheckFaceSign
      */
-    private suspend fun querySignInfoDetail(aid: String): JSONObject? {
-        return try {
-            val url = "https://mobilelearn.chaoxing.com/v2/apis/active/getPPTActiveInfo?activeId=$aid"
-            val resp = NetworkUtils.request(NetworkUtils.buildClientRequest(url))
+    private suspend fun executeSign(
+        aid: String, uid: String, otherId: String,
+        fullIdParams: String?, enc: String?,
+        lat: String, lon: String, addr: String,
+        courseId: String, clazzId: String,
+        faceEnc: String?, objectId: String?, captchaValidate: String?
+    ): com.cofbro.qian.signer.SignResult {
+        val isQrSign = otherId == Constants.SIGN.SCAN_QR
+
+        if (isQrSign && !fullIdParams.isNullOrEmpty()) {
+            // ===== QR签到: 正确路径(单次GET) =====
+            val locationJson = """{"result":1,"latitude":$lat,"longitude":$lon,"address":"${addr.replace("\"", "\\\"")}"}"""
+            val locationEncoded = java.net.URLEncoder.encode(locationJson, "UTF-8")
+            val sb = StringBuilder("https://mobilelearn.chaoxing.com/pptSign/stuSignajax?activeId=$fullIdParams&location=$locationEncoded&uid=$uid")
+            enc?.let { sb.append("&enc=$it") }
+            faceEnc?.let { sb.append("&currentFaceId=${CacheUtils.cache["faceObjectId"] ?: ""}&ifCFP=0&courseId=$courseId&faceEnc=$it") }
+            objectId?.let { sb.append("&objectId=$it") }
+            captchaValidate?.let { sb.append("&validate=$it") }
+
+            val resp = NetworkUtils.request(NetworkUtils.buildClientRequest(sb.toString()))
             val body = resp.data?.body?.string() ?: ""
-            val json = body.safeParseToJson()
-            json?.getJSONObject("data")
-        } catch (e: Exception) {
-            DebugLogCollector.w(QR_DEBUG, "查询签到详情异常: ${e.message}")
-            null
+
+            var result = com.cofbro.qian.signer.SignResult.fromBody(body)
+
+            // 保底1: errorLocation → 遍历预设地址
+            if (result.isLocationError) {
+                val presets = PresetLocationManager.loadAll(requireContext())
+                for ((i, loc) in presets.withIndex()) {
+                    val bdLatLon = NativeLocationUtils.wgs84ToBd09(loc.longitude, loc.latitude)
+                    val retryAddr = loc.address.ifEmpty { loc.name }
+                    val retryLocJson = """{"result":1,"latitude":${bdLatLon.latitude},"longitude":${bdLatLon.longitude},"address":"${retryAddr.replace("\"", "\\\"")}"}"""
+                    val retrySb = StringBuilder("https://mobilelearn.chaoxing.com/pptSign/stuSignajax?activeId=$fullIdParams&location=${java.net.URLEncoder.encode(retryLocJson, "UTF-8")}&uid=$uid")
+                    enc?.let { retrySb.append("&enc=$it") }
+                    faceEnc?.let { retrySb.append("&currentFaceId=${CacheUtils.cache["faceObjectId"] ?: ""}&ifCFP=0&courseId=$courseId&faceEnc=$it") }
+                    objectId?.let { retrySb.append("&objectId=$it") }
+                    captchaValidate?.let { retrySb.append("&validate=$it") }
+                    val retryResp = NetworkUtils.request(NetworkUtils.buildClientRequest(retrySb.toString()))
+                    val retryBody = retryResp.data?.body?.string() ?: ""
+                    result = com.cofbro.qian.signer.SignResult.fromBody(retryBody)
+                    if (result.isSuccess() || result.isAlreadySigned || result.isExpired || result.isEnded) break
+                    if (result.validateToken != null || result.faceToken != null) break
+                }
+            }
+
+            // 保底2: validate_(验证码) → 用预获取validate重签
+            if (result.captchaToken != null && !captchaValidate.isNullOrEmpty()) {
+                val retrySb = StringBuilder("https://mobilelearn.chaoxing.com/pptSign/stuSignajax?activeId=$fullIdParams&location=$locationEncoded&uid=$uid")
+                enc?.let { retrySb.append("&enc=$it") }
+                faceEnc?.let { retrySb.append("&currentFaceId=${CacheUtils.cache["faceObjectId"] ?: ""}&ifCFP=0&courseId=$courseId&faceEnc=$it") }
+                objectId?.let { retrySb.append("&objectId=$it") }
+                retrySb.append("&validate=$captchaValidate")
+                val retryResp = NetworkUtils.request(NetworkUtils.buildClientRequest(retrySb.toString()))
+                val retryBody = retryResp.data?.body?.string() ?: ""
+                result = com.cofbro.qian.signer.SignResult.fromBody(retryBody)
+            }
+
+            return result
         }
+
+        // ===== 非QR签到: 正确路径(POST) =====
+        val resp = NetworkUtils.postSign(aid = aid, uid = uid,
+            fid = CacheUtils.cache["fid"] ?: "", name = CacheUtils.cache["username"] ?: "",
+            latitude = lat, longitude = lon, address = addr,
+            objectId = objectId)
+        var body = resp.data?.body?.string() ?: ""
+        var result = com.cofbro.qian.signer.SignResult.fromBody(body)
+
+        // 保底: errorLocation → 遍历预设地址
+        if (result.isLocationError) {
+            val presets = PresetLocationManager.loadAll(requireContext())
+            for ((i, loc) in presets.withIndex()) {
+                val bdLatLon = NativeLocationUtils.wgs84ToBd09(loc.longitude, loc.latitude)
+                val locAddr = loc.address.ifEmpty { loc.name }
+                val retryResp = NetworkUtils.postSign(aid = aid, uid = uid,
+                    fid = CacheUtils.cache["fid"] ?: "", name = CacheUtils.cache["username"] ?: "",
+                    latitude = bdLatLon.latitude.toString(), longitude = bdLatLon.longitude.toString(),
+                    address = locAddr, objectId = objectId)
+                body = retryResp.data?.body?.string() ?: ""
+                result = com.cofbro.qian.signer.SignResult.fromBody(body)
+                if (result.isSuccess() || result.isAlreadySigned || result.isExpired || result.isEnded) break
+                if (result.validateToken != null || result.faceToken != null) break
+            }
+        }
+
+        return result
+    }
+
+    private suspend fun querySignType(aid: String): String {
+        val signTypeUrl = URL.getSignType(aid)
+        val signTypeResp = NetworkUtils.request(NetworkUtils.buildClientRequest(signTypeUrl))
+        return signTypeResp.data?.body?.string() ?: ""
     }
 
     /**
@@ -1291,7 +1241,6 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
      */
     private suspend fun handleAntiCheatCaptcha(aid: String, enc: String?, fullIdParams: String?) {
         try {
-            DebugLogCollector.d(QR_DEBUG, "===== 防作弊: 验证码签到开始 =====")
             val uid = CacheUtils.cache["uid"] ?: ""
             val fid = CacheUtils.cache["fid"] ?: ""
             val name = CacheUtils.cache["username"] ?: ""
@@ -1299,7 +1248,6 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
             doPreSign(aid)
 
             // 方式A: 滑块验证码(captcha.chaoxing.com)
-            DebugLogCollector.d(QR_DEBUG, "滑块验证码...")
             val captchaData = CaptchaHelper.getCaptchaImage(activeId = aid, uid = uid)
 
             if (captchaData != null) {
@@ -1312,7 +1260,6 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
                     )
                     dialog.show()
                 }
-                // 等待dialog完成
                 var wait = 0
                 while (validateResult == null && wait < 120) { kotlinx.coroutines.delay(500); wait++ }
 
@@ -1323,7 +1270,6 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
                     }
                     val resp = NetworkUtils.request(NetworkUtils.buildClientRequest(signUrl))
                     val body = resp.data?.body?.string() ?: ""
-                    DebugLogCollector.d(QR_DEBUG, "滑块验证码签到: $body")
                     withContext(Dispatchers.Main) {
                         if (body.contains("成功") || body.contains("success")) ToastUtils.show("验证码签到成功!")
                         else ToastUtils.show("签到结果: $body")
@@ -1333,7 +1279,6 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
             }
 
             // 方式B: 手动输入验证码
-            DebugLogCollector.d(QR_DEBUG, "手动输入验证码...")
             val postResp = NetworkUtils.postSign(aid = aid, uid = uid, fid = fid, name = name, latitude = "-1", longitude = "-1")
             val postBody = postResp.data?.body?.string() ?: ""
             if (!postBody.startsWith("validate_")) {
@@ -1380,10 +1325,8 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
      */
     private suspend fun submitAntiCheatCaptcha(aid: String, uid: String, validate: String, code: String) {
         try {
-            DebugLogCollector.d(QR_DEBUG, "提交验证码: code=$code, validate=$validate")
             val resp = NetworkUtils.submitCaptcha(aid, uid, validate, code)
             val body = resp.data?.body?.string() ?: ""
-            DebugLogCollector.d(QR_DEBUG, "验证码提交响应: $body")
             withContext(Dispatchers.Main) {
                 if (body.contains("成功") || body.contains("success")) {
                     ToastUtils.show("验证码签到成功!")
@@ -1402,28 +1345,23 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
      */
     private suspend fun handleAntiCheatFace(aid: String, enc: String?, fullIdParams: String?) {
         try {
-            DebugLogCollector.d(QR_DEBUG, "===== 防作弊: 人脸识别绕过 =====")
             val uid = CacheUtils.cache["uid"] ?: ""
 
-            // 先POST签到触发checkFace_
             val postResp = NetworkUtils.postSign(
                 aid = aid, uid = uid, fid = CacheUtils.cache["fid"] ?: "",
                 name = CacheUtils.cache["username"] ?: "",
                 latitude = "-1", longitude = "-1"
             )
             val postBody = postResp.data?.body?.string() ?: ""
-            DebugLogCollector.d(QR_DEBUG, "POST响应: $postBody")
 
             if (postBody.startsWith("checkFace_")) {
                 val faceToken = postBody.removePrefix("checkFace_")
-                DebugLogCollector.d(QR_DEBUG, "检测到checkFace, token=$faceToken")
                 val result = handleCheckFaceSign(aid, uid, faceToken, "-1", "-1", "")
                 withContext(Dispatchers.Main) {
                     if (result) ToastUtils.show("人脸识别绕过成功!")
                     else ToastUtils.show("人脸识别绕过失败")
                 }
             } else if (postBody.startsWith("validate_")) {
-                DebugLogCollector.d(QR_DEBUG, "检测到validate_, 走照片验证")
                 val validateToken = postBody.removePrefix("validate_")
                 val result = handleValidateSign(aid, uid, validateToken, "-1", "-1", "")
                 withContext(Dispatchers.Main) {
@@ -1446,21 +1384,17 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
      */
     private suspend fun handleAntiCheatPhoto(aid: String, enc: String?, fullIdParams: String?) {
         try {
-            DebugLogCollector.d(QR_DEBUG, "===== 防作弊: 照片验证签到 =====")
             val uid = CacheUtils.cache["uid"] ?: ""
 
-            // 先POST签到触发validate_
             val postResp = NetworkUtils.postSign(
                 aid = aid, uid = uid, fid = CacheUtils.cache["fid"] ?: "",
                 name = CacheUtils.cache["username"] ?: "",
                 latitude = "-1", longitude = "-1"
             )
             val postBody = postResp.data?.body?.string() ?: ""
-            DebugLogCollector.d(QR_DEBUG, "POST响应: $postBody")
 
             if (postBody.startsWith("validate_")) {
                 val validateToken = postBody.removePrefix("validate_")
-                DebugLogCollector.d(QR_DEBUG, "检测到validate_, token=$validateToken")
                 val result = handleValidateSign(aid, uid, validateToken, "-1", "-1", "")
                 withContext(Dispatchers.Main) {
                     if (result) ToastUtils.show("照片验证签到成功!")
@@ -1468,7 +1402,6 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
                 }
             } else if (postBody.startsWith("checkFace_")) {
                 val faceToken = postBody.removePrefix("checkFace_")
-                DebugLogCollector.d(QR_DEBUG, "检测到checkFace_, 走人脸识别绕过")
                 val result = handleCheckFaceSign(aid, uid, faceToken, "-1", "-1", "")
                 withContext(Dispatchers.Main) {
                     if (result) ToastUtils.show("人脸识别绕过成功!")
@@ -1587,8 +1520,6 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
                         val fid = CacheUtils.cache["fid"] ?: ""
                         val name = CacheUtils.cache["username"] ?: ""
 
-                        DebugLogCollector.d("ManualSign", "手动签到: aid=$aid type=${typeValues[selectedTypeIndex]} enc=$enc")
-
                         // 用Signer体系签到
                         val fullParams = if (enc != null) "$aid&enc=$enc" else null
                         val signer = com.cofbro.qian.signer.SignDispatcher.createSigner(
@@ -1605,7 +1536,6 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
                         signer.prepareAll(requireContext())
 
                         val result = signer.sign()
-                        DebugLogCollector.d("ManualSign", "手动签到结果: ${result.message}")
                         withContext(Dispatchers.Main) {
                             if (result.isSuccess()) ToastUtils.show("手动签到成功!")
                             else ToastUtils.show("签到结果: ${result.message}")
@@ -1738,7 +1668,6 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
         lifecycleScope.launch(Dispatchers.IO) {
             try {
                 withContext(Dispatchers.Main) { ToastUtils.show("正在查询最近签到活动...") }
-                DebugLogCollector.d(QR_DEBUG, "===== 开始查询最近签到活动 =====")
 
                 // 1. 获取课程列表
                 val courseResp = NetworkUtils.request(NetworkUtils.buildClientRequest(URL.getAllCourseListPath()))
@@ -1769,7 +1698,6 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
                         }
                     }
                 }
-                DebugLogCollector.d(QR_DEBUG, "共${courses.size}门课程, 开始遍历查找签到活动")
 
                 // 3. 遍历课程查找进行中的签到活动
                 data class SignActivity(
@@ -1809,10 +1737,9 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
                                 }
                                 // 应用签到类型筛选(跳过用户关闭的类型)
                                 if (!com.cofbro.qian.utils.SignFilterManager.isAutoSignEnabled(otherId)) {
-                                    DebugLogCollector.d(QR_DEBUG, "用户已关闭此类型: [$name] type=$otherId, 跳过")
+                                    // 用户已关闭此类型, 跳过
                                 } else {
                                     foundActivities.add(SignActivity(aid, name, course.courseName, typeLabel, "进行中"))
-                                    DebugLogCollector.d(QR_DEBUG, "发现进行中签到: [$name] aid=$aid, type=$typeLabel, course=${course.courseName}")
                                 }
                             }
                         }
@@ -1828,10 +1755,8 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
 
                 // 4. 展示结果
                 if (foundActivities.isEmpty()) {
-                    DebugLogCollector.d(QR_DEBUG, "未发现进行中的签到活动")
                     withContext(Dispatchers.Main) { ToastUtils.show("未发现进行中的签到活动") }
                 } else {
-                    DebugLogCollector.d(QR_DEBUG, "共发现${foundActivities.size}个进行中签到")
                     withContext(Dispatchers.Main) {
                         val displayItems = foundActivities.map { 
                             "${it.name}\n[${it.signType}] ${it.courseName}" 
@@ -1840,7 +1765,6 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
                             .setTitle("发现${foundActivities.size}个进行中签到（点击签到）")
                             .setItems(displayItems) { _, which ->
                                 val activity = foundActivities[which]
-                                DebugLogCollector.d(QR_DEBUG, "用户选择签到: ${activity.name}, aid=${activity.aid}, type=${activity.signType}")
                                 lifecycleScope.launch(Dispatchers.IO) {
                                     startAutoSignFromActivity(activity.aid)
                                 }
@@ -1861,18 +1785,14 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
      */
     private suspend fun startAutoSignFromActivity(aid: String) {
         if (isSigningIn) {
-            DebugLogCollector.w(QR_DEBUG, "签到进行中, 忽略重复请求")
             return
         }
         isSigningIn = true
         try {
-            DebugLogCollector.d(QR_DEBUG, "===== 从活动列表自动签到: aid=$aid =====")
             withContext(Dispatchers.Main) { ToastUtils.show("开始自动签到: $aid") }
 
-            // 预签到
             doPreSign(aid)
 
-            // 查询签到类型
             val signTypeBody = querySignType(aid)
             val signTypeData = signTypeBody.safeParseToJson()
             val signType = if (signTypeData.size > 0) signTypeData.getStringExt("otherId") else ""
@@ -1880,11 +1800,7 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
             val fid = CacheUtils.cache["fid"] ?: ""
             val name = CacheUtils.cache["username"] ?: ""
 
-            DebugLogCollector.d(QR_DEBUG, "签到类型: $signType")
-
-            // 检查用户筛选: 如果此类型被关闭则跳过
             if (!com.cofbro.qian.utils.SignFilterManager.isAutoSignEnabled(signType)) {
-                DebugLogCollector.d(QR_DEBUG, "用户已关闭此签到类型, 跳过: $signType")
                 withContext(Dispatchers.Main) { ToastUtils.show("已跳过${signType}类型(签到筛选)") }
                 return
             }
@@ -1899,7 +1815,6 @@ class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
 
             val signResult = signer.sign()
 
-            DebugLogCollector.d(QR_DEBUG, "签到结果: success=${signResult.isSuccess()} msg=${signResult.message}")
             withContext(Dispatchers.Main) {
                 when {
                     signResult.isSuccess() -> ToastUtils.show("签到成功!")

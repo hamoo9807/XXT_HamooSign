@@ -46,8 +46,10 @@ class AccountsAdapter : RecyclerView.Adapter<AccountsAdapter.AccountsHolder>() {
     private var itemClick: ((JSONObject?) -> Unit)? = null
     private var itemLongClick: ((View, JSONObject?, Int) -> Unit)? = null
     private var onDataChanged: ((JSONObject?) -> Unit)? = null
+    private var appContext: android.content.Context? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountsHolder {
+        appContext = parent.context.applicationContext
         val inflater = LayoutInflater.from(parent.context)
         val binding = ItemAccountsListBinding.inflate(inflater, parent, false)
         return AccountsHolder(binding)
@@ -151,6 +153,15 @@ class AccountsAdapter : RecyclerView.Adapter<AccountsAdapter.AccountsHolder>() {
                 accountData?.set(Constants.Account.USERS, array)
                 notifyItemRemoved(index)
                 onDataChanged?.invoke(accountData)
+            }
+        }
+        // 同步清理excludedUids, 避免重新绑定后仍被排除
+        if (uid.isNotEmpty()) {
+            val prefs = appContext?.getSharedPreferences("proxy_sign_selection", android.content.Context.MODE_PRIVATE)
+            val excluded = prefs?.getStringSet("excluded_uids", emptySet<String>())?.toMutableSet()
+            if (excluded != null && uid in excluded) {
+                excluded.remove(uid)
+                prefs.edit().putStringSet("excluded_uids", excluded).apply()
             }
         }
     }

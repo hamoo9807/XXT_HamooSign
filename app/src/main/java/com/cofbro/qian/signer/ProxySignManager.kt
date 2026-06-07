@@ -5,6 +5,8 @@ import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.cofbro.qian.utils.*
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import java.net.URLEncoder
@@ -73,6 +75,12 @@ class ProxySignManager(
             val prefs = context.getSharedPreferences("proxy_sign_selection", android.content.Context.MODE_PRIVATE)
             val excludedUids = prefs.getStringSet("excluded_uids", emptySet<String>()) ?: emptySet()
 
+            // 自动排除当前登录用户(自己不需要为自己代签)
+            val currentUid = CacheUtils.cache[Constants.Login.UID] ?: ""
+            if (currentUid.isNotEmpty()) {
+                DebugLogCollector.d(TAG, "当前登录用户: $currentUid, 自动排除")
+            }
+
             // 合并两个来源的用户
             val allUsers = (0 until users.size).map { users.getJSONObject(it) }.toMutableList()
             for (cookieUser in (0 until cookieUsers.size).map { cookieUsers.getJSONObject(it) }) {
@@ -93,6 +101,12 @@ class ProxySignManager(
                 val cookies = user.getStringExt(Constants.Account.COOKIE) ?: ""
 
                 if (cookies.isEmpty() && (uName.isEmpty() || pwd.isEmpty())) continue
+
+                // 自动排除当前登录用户(自己不需要为自己代签)
+                if (uUid.isNotEmpty() && uUid == currentUid) {
+                    DebugLogCollector.d(TAG, "跳过(当前登录用户): $uUid")
+                    continue
+                }
 
                 // 代签开关过滤: UID在排除列表 → 跳过
                 if (uUid.isNotEmpty() && uUid in excludedUids) {
@@ -137,7 +151,7 @@ class ProxySignManager(
     }
 
     /**
-     * 为所有用户执行代签
+     * 为所有用户执行代签 (并行版)
      * 每用户独立流程: 预签到 → 构建完整URL → 执行 → 位置重试 → 错误分类
      */
     suspend fun signForAll(): ProxySignSummary = withContext(Dispatchers.IO) {
@@ -148,63 +162,52 @@ class ProxySignManager(
         // 确保有真实坐标 (GPS → 缓存 → 预设)
         acquireLocationIfNeeded()
 
+        val total = proxyUsers.size
         val results = mutableListOf<SignResult>()
         var successCount = 0
         var failCount = 0
-        val total = proxyUsers.size
         val obsoleteUsers = mutableListOf<String>()
 
-        for ((index, user) in proxyUsers.withIndex()) {
-            // 跳过已废弃的会话
-            if (user.isSessionObsolete) {
-                DebugLogCollector.d(TAG, "跳过废弃会话: ${user.name}")
-                results.add(SignResult(false, "会话已过期, 请修复"))
-                failCount++
-                onProgress(index + 1, total, user.name, false)
-                continue
-            }
-
-            user.state.isLoading = true
-            onProgress(index, total, user.name, false)
-
-            try {
-                val result = signForUser(user)
-                results.add(result)
-
-                // CSF对齐: 已签到/非本班=跳过不计失败, 仅真正成功算成功
-                val isEffectiveSuccess = result.isSuccess() || result.isAlreadySigned || result.isNotInClass
-                if (isEffectiveSuccess) {
-                    user.state.isSuccess = true
-                    successCount++
-                    onProgress(index + 1, total, user.name, true)
-                } else {
-                    user.state.isSuccess = false
-                    user.state.error = result.message
-                    failCount++
-                    onProgress(index + 1, total, user.name, false)
-
-                    // 收集废弃会话
+        // 并行代签: 每个用户独立协程, 互不阻塞
+        val deferreds = kotlinx.coroutines.coroutineScope {
+            proxyUsers.mapIndexed { index, user ->
+                async {
                     if (user.isSessionObsolete) {
-                        obsoleteUsers.add(user.phone)
+                        DebugLogCollector.w(TAG, "跳过废弃会话: ${user.name}")
+                        return@async index to SignResult(false, "会话已过期, 请修复")
                     }
 
-                    // 如果是签到截止则停止后续代签
-                    if (result.isEnded) {
-                        DebugLogCollector.d(TAG, "签到已截止, 停止后续代签")
-                        break
+                    user.state.isLoading = true
+                    try {
+                        val result = signForUser(user)
+                        index to result
+                    } catch (e: Exception) {
+                        DebugLogCollector.w(TAG, "${user.name} 代签异常: ${e.message}")
+                        index to SignResult(false, e.message ?: "异常")
+                    } finally {
+                        user.state.isLoading = false
                     }
                 }
-            } catch (e: Exception) {
+            }
+        }
+
+        // 收集结果(按原始顺序)
+        val orderedResults = deferreds.awaitAll().sortedBy { it.first }
+        for ((index, result) in orderedResults) {
+            results.add(result)
+            val user = proxyUsers[index]
+            val isEffectiveSuccess = result.isSuccess() || result.isAlreadySigned || result.isNotInClass
+            if (isEffectiveSuccess) {
+                user.state.isSuccess = true
+                successCount++
+                onProgress(index + 1, total, user.name, true)
+            } else {
                 user.state.isSuccess = false
-                user.state.error = e.message ?: "未知异常"
-                results.add(SignResult(false, e.message ?: "异常"))
+                user.state.error = result.message
                 failCount++
                 onProgress(index + 1, total, user.name, false)
-            } finally {
-                user.state.isLoading = false
+                if (user.isSessionObsolete) obsoleteUsers.add(user.phone)
             }
-
-            delay(500) // 避免请求过快
         }
 
         DebugLogCollector.d(TAG, "代签完成: 成功$successCount 失败$failCount 共$total 废弃${obsoleteUsers.size}")
@@ -266,7 +269,6 @@ class ProxySignManager(
     private suspend fun signForUser(user: ProxyUserClient): SignResult {
         // 1. 独立预签到 (使用用户自己的HTTP客户端)
         doPreSignForUser(user)
-        delay(300)
 
         // 2. 构建完整签到URL
         val signUrl = buildCompleteSignUrl(user)
@@ -275,10 +277,8 @@ class ProxySignManager(
         var body: String
         try {
             body = user.executeSign(aid, signUrl)
-            DebugLogCollector.d(TAG, "${user.name} 签到响应: ${body.take(100)}")
         } catch (e: Exception) {
-            DebugLogCollector.e(TAG, "${user.name} 签到请求异常", e)
-            // 检查是否是认证失败
+            DebugLogCollector.w(TAG, "${user.name} 签到请求异常: ${e.message}")
             if (e.message?.contains("passport") == true || e.message?.contains("login") == true) {
                 user.markObsolete("认证失败: ${e.message}")
             }
@@ -288,9 +288,11 @@ class ProxySignManager(
         // 4. 初步解析响应
         var result = SignResult.fromBody(body)
 
-        // 5. errorLocation → 遍历预设地址重试 (CSF对齐)
+        // 成功/已签到/已过期/已截止 → 直接返回
+        if (result.isSuccess() || result.isAlreadySigned || result.isExpired || result.isEnded) return result
+
+        // 5. errorLocation → 遍历预设地址重试
         if (result.isLocationError) {
-            DebugLogCollector.d(TAG, "${user.name} 位置不在范围, 遍历预设地址重试...")
             val presets = PresetLocationManager.loadAll(context)
             for ((i, loc) in presets.withIndex()) {
                 val bdLatLon = NativeLocationUtils.wgs84ToBd09(loc.longitude, loc.latitude)
@@ -303,21 +305,18 @@ class ProxySignManager(
                 )
                 try {
                     body = user.executeSign(aid, retryUrl)
-                    DebugLogCollector.d(TAG, "${user.name} 预设[${i}]签到: ${body.take(100)}")
                     result = SignResult.fromBody(body)
-                    if (result.isSuccess()) break
-                    if (result.isExpired || result.isEnded || result.isAlreadySigned) break
+                    if (result.isSuccess() || result.isExpired || result.isEnded || result.isAlreadySigned) break
                     if (result.validateToken != null || result.faceToken != null) break
                 } catch (e: Exception) {
                     DebugLogCollector.w(TAG, "${user.name} 预设[${i}]异常: ${e.message}")
                 }
             }
+            if (result.isSuccess() || result.isAlreadySigned) return result
         }
 
         // 6. 处理需要进一步验证的响应
         if (result.validateToken != null) {
-            DebugLogCollector.d(TAG, "${user.name} 需要拍照验证, 尝试用预上传照片...")
-            // 用预上传的objectId重试
             val objectId = preparedParams["objectId"]
             if (!objectId.isNullOrEmpty()) {
                 val retryUrl = buildCompleteSignUrl(user) + "&objectId=$objectId"
@@ -384,7 +383,6 @@ class ProxySignManager(
                     .url("https://mobilelearn.chaoxing.com/pptSign/analysis2?DB_STRATEGY=RANDOM&code=$analysis2Code")
                     .build()).close()
             }
-            DebugLogCollector.d(TAG, "${user.name} 预签到完成")
         } catch (e: Exception) {
             DebugLogCollector.w(TAG, "${user.name} 预签到异常: ${e.message}")
         }

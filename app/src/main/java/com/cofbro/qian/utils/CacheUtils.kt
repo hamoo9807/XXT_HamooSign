@@ -117,6 +117,10 @@ object CacheUtils {
         cache.remove(Constants.Login.COOKIES)
         cache.remove(Constants.Login.UID)
         cache.remove(Constants.Login.FID)
+        cache.remove(Constants.USER.USERNAME)
+        cache.remove("password")
+        cache.remove("realName")
+        cache.remove("phone")
         // Also clear per-UID cookie entries
         val keysToRemove = cache.keys.filter { it.startsWith("${Constants.Login.COOKIES}_") }
         keysToRemove.forEach { cache.remove(it) }
